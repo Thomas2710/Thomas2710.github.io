@@ -1,0 +1,210 @@
+/* Global Styles */
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background: #f2f2f7;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Category Theme Variables */
+body.category-tech {
+  --category-color: #4a90e2;
+  --header-bg: #4a90e2;
+  --header-text: #ffffff;
+  --link-color: #e3f2fd;
+}
+
+body.category-politics {
+  --category-color: #e74c3c;
+  --header-bg: #e74c3c;
+  --header-text: #ffffff;
+  --link-color: #ffe9e9;
+}
+
+body.category-sports {
+  --category-color: #2ecc71;
+  --header-bg: #2ecc71;
+  --header-text: #ffffff;
+  --link-color: #eafff2;
+}
+
+/* Header */
+header {
+  padding: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  background-color: var(--header-bg, #fff);
+  color: var(--header-text, #333);
+}
+
+.header-left {
+  text-align: left;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+header p {
+  margin: 0.5rem 0 0;
+  color: #f0f0f0;
+}
+
+.header-contact {
+  margin-left: auto;
+}
+
+.header-contact a {
+  background: #4a90e2;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.header-contact a:hover {
+  background: #357ab8;
+}
+
+/* Navigation */
+nav a {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+}
+
+nav a::after {
+  content: attr(href);
+  position: absolute;
+  left: 0;
+  top: 100%;
+  font-size: 0.8rem;
+  color: var(--link-color, #0077cc);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+nav a:hover::after {
+  opacity: 1;
+}
+
+/* Layout */
+main {
+  padding: 2rem;
+}
+
+.categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+/* Contact Section */
+.contact {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  max-width: 600px;
+  margin: 0 auto 3rem auto;
+  text-align: center;
+}
+
+.contact h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+.contact a {
+  color: #0077cc;
+  text-decoration: none;
+}
+
+.contact a:hover {
+  text-decoration: underline;
+}
+
+/* Floating Contact Button */
+.contact-floating {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #4a90e2;
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.contact-floating:hover {
+  background: #357ab8;
+}
+
+/* Category Cards */
+.category-card {
+  background: white;
+  border-left: 6px solid var(--category-color, #4a90e2);
+  border-radius: 6px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.category-card h2 {
+  margin-top: 0;
+  color: var(--category-color, #4a90e2);
+}
+
+/* Articles */
+article {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-left: 6px solid var(--category-color, #4a90e2);
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+article:hover {
+  background: #f5faff;
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+
+article h2 {
+  margin-top: 0;
+  color: var(--category-color, #4a90e2);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.9rem;
+  color: #999;
+  border-top: 1px solid #eaeaea;
+  margin-top: 2rem;
+}
