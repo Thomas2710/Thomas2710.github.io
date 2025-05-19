@@ -1,10 +1,53 @@
+@font-face {
+  font-family: "aktiv-grotesk-std";
+  src: url("fonts/AktiveGrotesque/AktivGrotesk-Black.woff2") format("woff2"),
+       url("fonts/AktiveGrotesque/AktivGrotesk-Black.woff") format("woff"),
+       url("fonts/AktiveGrotesque/AktivGrotesk-BlackItalic.woff2") format("woff2"),
+       url("fonts/AktiveGrotesk/AktivGrotesk-BlackItalic.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+
 /* Global Styles */
 body {
   margin: 0;
   font-family: 'Helvetica Neue', sans-serif;
   background: #f2f2f7;
-  color: #333;
+  color: #6E0D3A;
   line-height: 1.6;
+}
+
+body {
+font-family: "aktiv-grotesk-std",sans-serif;
+font-style: normal;
+font-weight: 200;
+text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+background-color: #EEB367;
+}
+
+a, a:link {
+  text-decoration: none;
+  color: #ccc;
+  opacity: 1;
+  transition: all 0.5s ease;
+}
+
+a:hover, a:focus {
+  opacity: 0;
+}
+
+p.large {
+  padding: 10% 0;
+  color: #fff;
+  font-size: 5em;
+  line-height: 1.1;
+  margin: 0 auto;
+  text-align: left;
+  max-width: 16em;
 }
 
 /* Category Theme Variables */
@@ -36,8 +79,8 @@ header {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  background-color: var(--header-bg, #fff);
-  color: var(--header-text, #333);
+  background-color: var(--header-bg,  #333);
+  color: var(--header-text, #D94223);
 }
 
 .header-left {
@@ -59,7 +102,7 @@ header p {
 }
 
 .header-contact a {
-  background: #4a90e2;
+  background: #D94223;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 30px;
@@ -69,7 +112,7 @@ header p {
 }
 
 .header-contact a:hover {
-  background: #357ab8;
+  background: #D94223;
 }
 
 /* Navigation */
@@ -87,7 +130,7 @@ nav a::after {
   left: 0;
   top: 100%;
   font-size: 0.8rem;
-  color: var(--link-color, #0077cc);
+  color: var(--link-color, #6E0D3A);
   opacity: 0;
   transition: opacity 0.3s ease;
   white-space: nowrap;
@@ -126,7 +169,7 @@ main {
 }
 
 .contact a {
-  color: #0077cc;
+  color: #D94223;
   text-decoration: none;
 }
 
@@ -157,7 +200,7 @@ main {
 /* Category Cards */
 .category-card {
   background: white;
-  border-left: 6px solid var(--category-color, #4a90e2);
+  border-left: 6px solid var(--category-color, #6E0D3A);
   border-radius: 6px;
   padding: 1.5rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -172,7 +215,7 @@ main {
 
 .category-card h2 {
   margin-top: 0;
-  color: var(--category-color, #4a90e2);
+  color: var(--category-color, #6E0D3A);
 }
 
 /* Articles */
@@ -180,7 +223,7 @@ article {
   margin-bottom: 2rem;
   padding: 1.5rem;
   background: white;
-  border-left: 6px solid var(--category-color, #4a90e2);
+  border-left: 6px solid var(--category-color, #6E0D3A);
   border-radius: 6px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   cursor: pointer;
@@ -196,7 +239,7 @@ article:hover {
 
 article h2 {
   margin-top: 0;
-  color: var(--category-color, #4a90e2);
+  color: var(--category-color, #6E0D3A);
 }
 
 /* Footer */
