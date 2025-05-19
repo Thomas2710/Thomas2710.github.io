@@ -8,16 +8,16 @@ body {
 }
 
 /* Category Theme Variables */
-body.category-tech {
-  --category-color: #4a90e2;
-  --header-bg: #4a90e2;
+body.category-food {
+  --category-color: #9bceb5;
+  --header-bg: #9bceb5;
   --header-text: #ffffff;
   --link-color: #e3f2fd;
 }
 
-body.category-politics {
-  --category-color: #e74c3c;
-  --header-bg: #e74c3c;
+body.category-welfare {
+  --category-color: #e5af7d;
+  --header-bg: #e5af7d;
   --header-text: #ffffff;
   --link-color: #ffe9e9;
 }
