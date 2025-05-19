@@ -13,25 +13,20 @@
 
 /* Global Styles */
 body {
-  margin: 0;
-  font-family: 'Helvetica Neue', sans-serif;
-  background: #f2f2f7;
-  color: #6E0D3A;
-  line-height: 1.6;
-}
-
-body {
+margin: 0;
+line-height: 1.6;
 font-family: "aktiv-grotesk-std",sans-serif;
 font-style: normal;
 font-weight: 200;
 text-rendering: optimizeLegibility;
 -webkit-font-smoothing: antialiased;
-background-color: #EEB367;
+background-color: var(--body-bg, #EEB367);
+color: var(--body-color, #6E0D3A);
 }
 
 a, a:link {
   text-decoration: none;
-  color: #ccc;
+  color: var(--link-color, #ccc);
   opacity: 1;
   transition: all 0.5s ease;
 }
@@ -50,30 +45,12 @@ p.large {
   max-width: 16em;
 }
 
-/* Category Theme Variables */
-body.category-food {
-  --category-color: #9bceb5;
-  --header-bg: #9bceb5;
-  --header-text: #ffffff;
-  --link-color: #e3f2fd;
-}
-
-body.category-welfare {
-  --category-color: #e5af7d;
-  --header-bg: #e5af7d;
-  --header-text: #ffffff;
-  --link-color: #ffe9e9;
-}
-
-body.category-sports {
-  --category-color: #2ecc71;
-  --header-bg: #2ecc71;
-  --header-text: #ffffff;
-  --link-color: #eafff2;
-}
 
 /* Header */
 header {
+  margin-bottom: 0;
+  position: relative;
+  z-index: 1;
   padding: 2rem;
   display: flex;
   justify-content: space-between;
@@ -81,6 +58,14 @@ header {
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   background-color: var(--header-bg,  #333);
   color: var(--header-text, #D94223);
+}
+
+svg {
+  display: block;
+  width: 100%;
+  height: 60px; /* same as viewBox height */
+  position: relative;
+  z-index: 0;
 }
 
 .header-left {
@@ -102,17 +87,18 @@ header p {
 }
 
 .header-contact a {
-  background: #D94223;
-  color: white;
+  background: var(--contact-bg, #D94223);
+  color: var(--contact-text, white);
   padding: 0.5rem 1rem;
   border-radius: 30px;
   text-decoration: none;
   font-weight: bold;
   transition: background 0.3s ease;
+
 }
 
 .header-contact a:hover {
-  background: #D94223;
+  background: var(--contact-hover-bg, #D94223);
 }
 
 /* Navigation */
@@ -120,7 +106,7 @@ nav a {
   display: inline-block;
   margin-top: 1rem;
   text-decoration: none;
-  color: inherit;
+  color: #212125;
   position: relative;
 }
 
@@ -139,6 +125,7 @@ nav a::after {
 nav a:hover::after {
   opacity: 1;
 }
+
 
 /* Layout */
 main {
@@ -201,11 +188,50 @@ main {
 .category-card {
   background: white;
   border-left: 6px solid var(--category-color, #6E0D3A);
-  border-radius: 6px;
+  border-radius: 30px;
   padding: 1.5rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Category Theme Variables */
+body.category-food {
+  --category-color: #239D60;
+  --header-bg: #A3DE83;
+  --header-text: #212125;
+  --link-color: #212125;
+
+  --body-bg: #F7F39A;
+  --body-color: #212125;     
+  --contact-bg: #239D60;        
+  --contact-text: #239D60;     
+  --contact-hover-bg: #239D60; 
+}
+
+body.category-welfare {
+  --category-color: #535A3B;
+  --header-bg: #CEDCC3;
+  --header-text: #535A3B;
+  --link-color: #212125;
+
+  --body-bg: #EFF7D3;  
+  --body-color: #A7B99E;         
+  --contact-bg: #535A3B;        
+  --contact-text:#A7B99E ;     
+  --contact-hover-bg: #212125; 
+}
+
+body.category-volunteer {
+  --category-color: #B73535;
+  --header-bg: #C7F2E3;
+  --header-text: #B73535;
+  --link-color: #212125;
+
+  --body-bg: #9ED9C5;           
+  --contact-bg: #239D60;        
+  --contact-text: #FFFFFF;     
+  --contact-hover-bg: #1A744B; 
 }
 
 .category-card:hover {
@@ -224,7 +250,7 @@ article {
   padding: 1.5rem;
   background: white;
   border-left: 6px solid var(--category-color, #6E0D3A);
-  border-radius: 6px;
+  border-radius: 30px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   cursor: pointer;
   transition: background 0.3s ease;
@@ -250,4 +276,16 @@ footer {
   color: #999;
   border-top: 1px solid #eaeaea;
   margin-top: 2rem;
+}
+
+.back-home {
+  color: var(--category-color, #6E0D3A);
+  font-weight: bold;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.back-home:hover {
+  color: darken(var(--category-color, #6E0D3A), 15%);
+  text-decoration: underline;
 }
