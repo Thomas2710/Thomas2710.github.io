@@ -9,13 +9,20 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "futura-book";
+  src: url("fonts/Futura/FuturaLT-Book.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
 
 
 /* Global Styles */
 body {
 margin: 0;
 line-height: 1.6;
-font-family: "aktiv-grotesk-std",sans-serif;
+font-family: "futura-book","aktiv-grotesk-std",sans-serif;
 font-style: normal;
 font-weight: 200;
 text-rendering: optimizeLegibility;
@@ -219,6 +226,7 @@ main {
 }
 
 /* Category Theme Variables */
+/*
 body.category-food {
   --category-color: #239D60;
   --header-bg: #A3DE83;
@@ -244,7 +252,6 @@ body.category-welfare {
   --contact-text:#A7B99E ;     
   --contact-hover-bg: #212125; 
 }
-
 body.category-volunteer {
   --category-color: #B73535;
   --header-bg: #C7F2E3;
@@ -256,17 +263,57 @@ body.category-volunteer {
   --contact-text: #FFFFFF;     
   --contact-hover-bg: #1A744B; 
 }
+*/
+body.category-food {
+  --category-color: #239D60;
+  --header-bg: #333;
+  --header-text: white;
+  --link-color: #239D60;
+
+  --body-bg: #333;
+  --body-color: #239D60;     
+  --contact-bg: #ffffff;        
+  --contact-text: #ffffff;     
+  --contact-hover-bg: #ffffff; 
+}
+
+body.category-welfare {
+  --category-color: #A7B99E;
+  --header-bg: #333;
+  --header-text: white;
+  --link-color: #A7B99E;
+
+  --body-bg: #333;
+  --body-color: #A7B99E;     
+  --contact-bg: #ffffff;        
+  --contact-text: #ffffff;     
+  --contact-hover-bg: #ffffff; 
+}
+
+body.category-volunteer {
+  --category-color: #B73535;
+  --header-bg: #333;
+  --header-text: white;
+  --link-color: #B73535;
+
+  --body-bg: #333;
+  --body-color: #B73535;     
+  --contact-bg: #ffffff;        
+  --contact-text: #ffffff;     
+  --contact-hover-bg: #ffffff; 
+}
 
 body.category-products {
-  --category-color: #B73535;
-  --header-bg: #C7F2E3;
-  --header-text: #B73535;
-  --link-color: #212125;
+  --category-color: #776AE3;
+  --header-bg: #333;
+  --header-text: white;
+  --link-color: #776AE3;
 
-  --body-bg: #9ED9C5;           
-  --contact-bg: #239D60;        
-  --contact-text: #FFFFFF;     
-  --contact-hover-bg: #1A744B; 
+  --body-bg: #333;
+  --body-color: #776AE3;     
+  --contact-bg: #ffffff;        
+  --contact-text: #ffffff;     
+  --contact-hover-bg: #ffffff; 
 }
 
 .category-card:hover {
