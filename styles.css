@@ -54,7 +54,6 @@ p.large {
   max-width: 16em;
 }
 
-
 /* Header */
 header {
   border-bottom: none; /* remove hard lines */
@@ -65,19 +64,50 @@ header {
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   background-color: var(--header-bg,  #333);
   color: var(--header-text, #ffffff);
+  flex-wrap: nowrap;
 }
 
 .header-left {
   text-align: left;
+  flex: 1 1 auto;
+  width: 100%;
+  margin-bottom: 1rem;  
+  min-width: 0;
+}
+
+nav {
+  flex-shrink: 0;
+}
+
+nav a.back-home {
+  white-space: nowrap; /* Keep button on one line */
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: var(--category-color, #FF7272);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+nav a.back-home:hover {
+  background-color: #cc5a5a;
 }
 
 header h1 {
   margin: 0;
   font-size: 2rem;
+}
+
+header h3 {
+  margin: 0.25rem 0 0 0;
+  font-weight: normal;
+  font-size: 1rem;
+  opacity: 0.8;
 }
 
 header p {
@@ -193,10 +223,7 @@ main {
     padding: 1rem;
   }
 
-  .header-left {
-    width: 100%;
-    margin-bottom: 1rem;
-  }
+
 
   .header-contact {
     width: 100%;
@@ -231,7 +258,7 @@ main {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
-  color: var(--category-color, #fff);
+  color: #fff;
 
   background-color: var(--category-color, #FF7272);
   border-radius: 50%;
@@ -243,10 +270,13 @@ main {
   transition: transform 0.3s ease;
 }
 
-.category-card:hover .arrow-icon {
+article:hover .arrow-icon {
   transform: translateX(6px);
 }
 
+.category-card:hover .arrow-icon {
+  transform: translateX(6px);
+}
 
 /* Category Theme Variables */
 /*
@@ -358,8 +388,10 @@ article {
   border-radius: 30px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   cursor: pointer;
+  position: relative; /* Required for absolute arrow */
   transition: background 0.3s ease;
 }
+
 
 article:hover {
   background: #f5faff;
@@ -367,6 +399,11 @@ article:hover {
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
+article::after {
+  content: "";
+  display: table;
+  clear: both;
+}
 
 article h2 {
   margin-top: 0;
@@ -410,7 +447,7 @@ footer {
 .video-preview {
   float: right;
   width: 250px;
-  height: 100px;
+  height: 150px;
   margin-left: 1rem;
   margin-top: 0; /* align to first line */
   vertical-align: top;
