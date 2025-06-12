@@ -1,3 +1,5 @@
+import '@/app/ui/global.css';
+import Header from './Header' 
 export default function RootLayout({
   children,
 }: {
@@ -5,7 +7,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body style={{ backgroundColor: '#444444', color: '#e2e8f0' }}>
+        <Header />
+        {children}
+      </body>
     </html>
   );
 }
