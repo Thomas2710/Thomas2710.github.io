@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, {useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import FilterBar from './knowledge/FilterBar';

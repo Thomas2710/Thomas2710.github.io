@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, {Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PostItBoard from './postitboard';
 import ThoughtInputBar from './inputbar';
@@ -25,7 +25,6 @@ export default function ThoughtsPage() {
       const res = await fetch('/api/thoughts');
       const data = await res.json();
       setThoughts(data);
-      console.log('Fetched thoughts:', data);
     } catch (err) {
       console.error('Failed to fetch thoughts:', err);
     }
@@ -35,11 +34,9 @@ export default function ThoughtsPage() {
     try {
       const res = await fetch('/api/categories');
       const data: { id: string; name: string }[] = await res.json();
-      console.log('Fetched categories:', data);
 
       const map: Record<string, string> = {};
       data.forEach((cat) => {
-        console.log(`Mapping category ${cat.name} to ID ${cat.id}`);
         map[cat.id] = cat.name;
       });
 
@@ -66,8 +63,6 @@ export default function ThoughtsPage() {
       (key) => categoryIdMap[key] === selectedCategory
     );
 
-    console.log('Adding thought to category:', selectedCategory, 'with ID:', categoryId);
-
     if (!categoryId) {
       console.error('Category ID not found for:', selectedCategory);
       return;
@@ -92,11 +87,10 @@ export default function ThoughtsPage() {
     }
   };
 
-
   const filteredThoughts = loading
     ? []
     : thoughts.filter((t) => categoryIdMap[t.category_id] === selectedCategory);
-
+  
   if (loading) {
     return (
       <main

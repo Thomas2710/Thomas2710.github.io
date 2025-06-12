@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, {Suspense, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { FaInstagram, FaEnvelope, FaLinkedin } from 'react-icons/fa';
 
@@ -82,6 +82,7 @@ const Header: React.FC = () => {
         </button>
 
         {/* Center: Category name */}
+        <Suspense>
         {pathname === '/thoughts' && categoryFromQuery && (
           <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
             <h2 style={{ fontSize: '1.25rem', margin: 0, color: '#f0f0f0' }}>
@@ -89,7 +90,7 @@ const Header: React.FC = () => {
             </h2>
           </div>
         )}
-
+        </Suspense>
         {/* Right: Page title + social links */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
           <span style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>
@@ -154,6 +155,7 @@ const Header: React.FC = () => {
               overflowY: 'auto',
             }}
           >
+          <Suspense>
             <nav>
               <ul style={{ listStyle: 'none', padding: 0 }}>
                 {/* Knowledge */}
@@ -211,6 +213,7 @@ const Header: React.FC = () => {
                 </ul>
               </ul>
             </nav>
+          </Suspense>
           </div>
         </>
       )}
