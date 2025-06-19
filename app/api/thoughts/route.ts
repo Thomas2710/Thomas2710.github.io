@@ -57,3 +57,31 @@ export async function POST(req: Request): Promise<Response> {
 
   return Response.json({ success: true })
 }
+
+export async function GET(): Promise<Response> {
+  const { data, error } = await supabase
+    .from('thoughts')
+    .select('id, text, category_id')
+    .order('inserted_at', { ascending: false });
+
+  if (error) {
+    console.error('Supabase GET error:', error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500 }
+    );
+  }
+
+  // Sanitize each text field to strip out any HTML
+  const sanitized = (data ?? []).map((row) => ({
+    id: row.id,
+    category_id: row.category_id,
+    text: sanitizeHtml(row.text, {
+      allowedTags: [],       // no tags allowed
+      allowedAttributes: {}, // no attributes allowed
+    }),
+  }));
+
+  return Response.json(sanitized);
+}
+
