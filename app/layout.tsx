@@ -1,5 +1,8 @@
+// app/layout.tsx
 import '@/app/ui/global.css';
-import Header from './Header' 
+import React, { Suspense } from 'react';
+import Header from './Header';
+
 export default function RootLayout({
   children,
 }: {
@@ -8,9 +11,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body style={{ backgroundColor: '#444444', color: '#e2e8f0' }}>
-        <Header />
+        <Suspense fallback={<div>Loading header…</div>}>
+          <Header />
+        </Suspense>
         {children}
       </body>
     </html>
   );
 }
+

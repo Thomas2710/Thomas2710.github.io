@@ -1,105 +1,66 @@
+// components/Header.tsx
 'use client';
-import React, {Suspense, useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+
+import React, { Suspense, useEffect, useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { FaInstagram, FaEnvelope, FaLinkedin } from 'react-icons/fa';
 
-const iconStyle: React.CSSProperties = {
-  width: '24px',
-  height: '24px',
-  marginLeft: '12px',
-  cursor: 'pointer',
-};
-
-const pathToTitle: Record<string, string> = {
-  '/': 'Knowledge',
-  '/thoughts': 'Thoughts',
-};
-type Category = {
-  id: string;
-  name: string;
-};
+type Category = { id: string; name: string };
 
 const Header: React.FC = () => {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathName = usePathname()
+  const pageTitle = pathName.charAt(1).toUpperCase() +usePathname().slice(2);
   const searchParams = useSearchParams();
-
   const categoryFromQuery = searchParams.get('category') ?? '';
 
-  const pageTitle =
-    pathname === '/thoughts'
-      ? 'Thoughts'
-      : pathToTitle[pathname ?? ''] ?? 'Page';
 
   const closeNav = () => setIsNavOpen(false);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    async function fetchCategories() {
       try {
-        const response = await fetch('/api/categories');
-        if (!response.ok) throw new Error('Failed to fetch categories');
-        const data = await response.json();
+        const res = await fetch('/api/categories');
+        if (!res.ok) throw new Error('Failed to fetch categories');
+        const data: Category[] = await res.json();
         setCategories(data);
-      } catch (error) {
-        console.error('Error loading categories:', error);
+      } catch (err) {
+        console.error('Error loading categories:', err);
       }
-    };
-
+    }
     fetchCategories();
   }, []);
 
   return (
-    <>
-      {/* Top Header */}
-      <header
-        style={{
-          backgroundColor: '#444444',
-          color: 'white',
-          padding: '1rem 1.5rem',
-          display: 'flex',
-          alignItems: 'flex-start',
-          justifyContent: 'space-between',
-          position: 'relative',
-          zIndex: 100,
-        }}
-      >
-        {/* Left: ☰ Button */}
+    <Suspense
+      fallback={
+        <div className="bg-[#444444] text-white p-4 flex items-center justify-center">
+          Loading header...
+        </div>
+      }
+    >
+      <header className="bg-[#444444] text-white p-4 flex justify-between items-start relative z-50">
         <button
+          className="text-white text-2xl focus:outline-none"
           onClick={() => setIsNavOpen(true)}
-          style={{
-            fontSize: '1.5rem',
-            background: 'none',
-            border: 'none',
-            color: 'white',
-            cursor: 'pointer',
-            marginTop: '0.25rem',
-          }}
           aria-label="Open navigation"
         >
           ☰
         </button>
 
-        {/* Center: Category name */}
-        <Suspense>
-        {pathname === '/thoughts' && categoryFromQuery && (
-          <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-            <h2 style={{ fontSize: '1.25rem', margin: 0, color: '#f0f0f0' }}>
-              {categoryFromQuery}
-            </h2>
+        {pathName === '/thoughts' && categoryFromQuery && (
+          <div className="absolute left-1/2 transform -translate-x-1/2">
+            <h2 className="text-lg text-gray-200">{categoryFromQuery}</h2>
           </div>
         )}
-        </Suspense>
-        {/* Right: Page title + social links */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-          <span style={{ fontSize: '1rem', fontWeight: 'bold', marginBottom: '0.25rem' }}>
-            {pageTitle}
-          </span>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            Consigliami qualcosa!!
+
+        <div className="flex flex-col items-end">
+          <span className="font-bold text-base mb-1">{pageTitle}</span>
+          <div className="flex items-center space-x-3">
             <a href="mailto:thomas.trevisan00@gmail.com" title="Email">
-              <FaEnvelope style={iconStyle} />
+              <FaEnvelope className="w-6 h-6" />
             </a>
             <a
               href="https://instagram.com/yourprofile"
@@ -107,7 +68,7 @@ const Header: React.FC = () => {
               rel="noopener noreferrer"
               title="Instagram"
             >
-              <FaInstagram style={iconStyle} />
+              <FaInstagram className="w-6 h-6" />
             </a>
             <a
               href="https://linkedin.com/in/yourprofile"
@@ -115,109 +76,59 @@ const Header: React.FC = () => {
               rel="noopener noreferrer"
               title="LinkedIn"
             >
-              <FaLinkedin style={iconStyle} />
+              <FaLinkedin className="w-6 h-6" />
             </a>
           </div>
         </div>
       </header>
 
-      {/* Sidebar & Overlay */}
       {isNavOpen && (
-        <>
-          {/* Overlay */}
+        <>          
           <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
             onClick={closeNav}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
-              zIndex: 90,
-            }}
           />
+          <nav className="fixed inset-y-0 left-0 w-72 bg-gray-800 p-6 overflow-y-auto z-50">
+            <ul className="space-y-2">
+              <li>
+                <Link href="/" passHref
+                    onClick={closeNav}
+                    className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+                  >
+                    <span className="text-white">Knowledge</span>
+                </Link>
+              </li>
 
-          {/* Sidebar */}
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '300px',
-              height: '100vh',
-              backgroundColor: '#333',
-              padding: '2rem 1.5rem',
-              color: 'white',
-              zIndex: 100,
-              display: 'flex',
-              flexDirection: 'column',
-              overflowY: 'auto',
-            }}
-          >
-          <Suspense>
-            <nav>
-              <ul style={{ listStyle: 'none', padding: 0 }}>
-                {/* Knowledge */}
-                <li style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                  {pathname === '/' ? (
-                    <span style={{ marginRight: '0.5rem' }}>➤</span>
-                  ) : (
-                    <span style={{ width: '1.25rem', marginRight: '0.5rem' }} />
-                  )}
-                  <a href="/" style={{ color: 'white', textDecoration: 'none' }}>
-                    Knowledge
-                  </a>
-                </li>
-
-                {/* Thoughts + Categories */}
-                <li style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
-                  <span style={{ width: '1.25rem', marginRight: '0.5rem' }} />
-                  Thoughts
-                </li>
-                <ul style={{ listStyle: 'none', paddingLeft: '1.5rem' }}>
-                  {categories.map((cat) => {
-                    const isSelected = pathname === '/thoughts' && categoryFromQuery === cat.name;
-                    return (
-                      <li
-                        key={cat.name}
-                        onClick={() => {
-                          closeNav();
-                          router.push(`/thoughts?category=${encodeURIComponent(cat.name)}`);
-                        }}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          cursor: 'pointer', // Ensure pointer cursor is applied
-                          padding: '0.25rem 0',
-                          transition: 'background-color 0.3s ease', // Optional: smooth transition for hover effect
-                        }}
-                        onMouseEnter={(e) => {
-                          // Add hover effect
-                          e.currentTarget.style.backgroundColor = '#444'; // Highlight on hover
-                        }}
-                        onMouseLeave={(e) => {
-                          // Revert hover effect
-                          e.currentTarget.style.backgroundColor = ''; // Revert the background when not hovering
-                        }}
+              <li className="mt-4 mb-2  text-gray-400 font-semibold pl-0">
+                <span className="w-5 mr-2" />
+                Thoughts
+              </li>
+              {categories.map((cat) => {
+                const isSelected = pathName === '/thoughts' && categoryFromQuery === cat.name;
+                return (
+                  <li key={cat.id}>
+                    <Link
+                      href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
+                      passHref
+                        onClick={closeNav}
+                        className={`flex items-center py-2 px-1 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
+                          isSelected ? 'bg-[#444444]' : ''
+                        }`}
                       >
-                        {isSelected ? (
-                          <span style={{ marginRight: '0.5rem' }}>➤</span>
-                        ) : (
-                          <span style={{ width: '1.25rem', marginRight: '0.5rem' }} />
-                        )}
-                        <span style={{ color: 'white' }}>{cat.name}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </ul>
-            </nav>
-          </Suspense>
-          </div>
+                        <span className="w-5 mr-2">
+                          {isSelected ? '➤' : ''}
+                        </span>
+                        <span className="text-white">{cat.name}</span>
+
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </>
       )}
-    </>
+    </Suspense>
   );
 };
 

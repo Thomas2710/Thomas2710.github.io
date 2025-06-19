@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Suspense } from 'react'
 
 interface ThoughtInputBarProps {
   newThought: string
@@ -12,6 +12,7 @@ export default function ThoughtInputBar({
   addThought,
 }: ThoughtInputBarProps) {
   return (
+    <Suspense fallback={<div>Loading input bar...</div>}>
     <div
       style={{
         width: '100%',
@@ -57,5 +58,6 @@ export default function ThoughtInputBar({
         Add
       </button>
     </div>
+    </Suspense>
   )
 }

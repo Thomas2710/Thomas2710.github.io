@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { Suspense, useEffect, useRef, useState } from 'react'
 import type { Thought } from '../lib/thoughts'
 
 interface RenderedThought extends Thought {
@@ -90,6 +90,7 @@ export default function PostItBoard({
   })
 
   return (
+    <Suspense fallback={<div>Loading notes...</div>}>
     <div
       style={{
         position: 'relative',
@@ -153,5 +154,6 @@ export default function PostItBoard({
         </div>
       ))}
     </div>
+    </Suspense>
   )
 }
