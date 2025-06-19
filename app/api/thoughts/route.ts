@@ -1,67 +1,59 @@
-import supabase from '@/lib/supabase';
-import { LRUCache } from 'lru-cache';
 
-// Define the shape of the incoming request body
-interface ThoughtInput {
-  text: string;
-  category_id: string;
-}
+import { z } from 'zod'
+import sanitizeHtml from 'sanitize-html'
+import supabase from '@/lib/supabase'
+import { LRUCache } from 'lru-cache'
 
-// Create a typed LRU cache for rate limiting based on IP
-const rateLimiter = new LRUCache<string, number>({
-  max: 5000,
-  ttl: 1000 * 60 * 1, // 1 minute
-});
+// … your rateLimiter setup …
+
+// 1️⃣ Define a Zod schema for your input
+const ThoughtSchema = z.object({
+  text: z
+    .string()
+    .trim()
+    .min(1, { message: 'Text can’t be empty' })
+    .max(500, { message: 'Text is too long' }),
+  category_id: z
+    .string()
+    .uuid({ message: 'Invalid category ID format' }),
+})
 
 export async function POST(req: Request): Promise<Response> {
-  const ip = req.headers.get('x-forwarded-for') || 'unknown';
-  const now = Date.now();
-  const lastRequestTime = rateLimiter.get(ip);
+  // … rate-limiting logic …
 
-  // Limit to one request every 500 seconds per IP
-  if (lastRequestTime && now - lastRequestTime < 500 * 1000) {
-    return new Response(JSON.stringify({ error: 'Too many requests' }), { status: 429 });
-  }
-
-  rateLimiter.set(ip, now);
-
-  let input: ThoughtInput;
+  let rawBody: unknown
   try {
-    input = await req.json();
+    rawBody = await req.json()
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 })
   }
 
-  const { text, category_id } = input;
-
-  if (!text || !category_id) {
-    return new Response(JSON.stringify({ error: 'Missing fields' }), { status: 400 });
+  // 2️⃣ Validate with Zod
+  const result = ThoughtSchema.safeParse(rawBody)
+  if (!result.success) {
+    const firstError = result.error.errors[0]
+    return new Response(
+      JSON.stringify({ error: firstError.message }),
+      { status: 400 }
+    )
   }
+  const { text, category_id } = result.data
 
+  // 3️⃣ Sanitize the text (strip all HTML tags/attributes)
+  const cleanText = sanitizeHtml(text, {
+    allowedTags: [],        // no HTML tags allowed
+    allowedAttributes: {},  // no attributes
+  })
+
+  // 4️⃣ Insert into Supabase (parameterized under the hood)
   const { error } = await supabase
     .from('thoughts')
-    .insert([{ text, category_id }]);
+    .insert([{ text: cleanText, category_id }])
 
   if (error) {
-    console.error('Supabase POST error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+    console.error('Supabase POST error:', error)
+    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
   }
 
-  return Response.json({ success: true });
+  return Response.json({ success: true })
 }
-
-export async function GET(): Promise<Response> {
-  const { data, error } = await supabase
-    .from('thoughts')
-    .select('id, text, category_id')
-    .order('inserted_at', { ascending: false });
-
-  if (error) {
-    console.error('Supabase GET error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-  }
-
-  return Response.json(data);
-}
-
-
