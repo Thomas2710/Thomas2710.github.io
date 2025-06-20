@@ -122,7 +122,8 @@ export default function ThoughtsPageClient() {
       {loading ? (
         <main
           style={{
-            height: '100vh',
+            width: `${boardSize.width}px`,
+            height: `${boardSize.height}px`,
             backgroundColor: '#444444',
             color: 'white',
             display: 'flex',
@@ -135,7 +136,8 @@ export default function ThoughtsPageClient() {
       ) : (
         <main
           style={{
-            height: 'calc(100vh - 70px)',
+            width: `${boardSize.width}px`,
+            height: `${boardSize.height}px`,
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: '#444444',
