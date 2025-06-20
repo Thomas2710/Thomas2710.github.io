@@ -29,8 +29,8 @@ export default function PostItBoard({
 
   useEffect(() => {
     const thoughtCount = thoughts.length
-    const computedWidth = Math.max(window.innerWidth, thoughtCount * 250)
-    const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 300)
+    const computedWidth = Math.max(window.innerWidth, thoughtCount * 50)
+    const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60)
 
     setBoardSize({ width: computedWidth, height: computedHeight })
 
