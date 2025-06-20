@@ -95,12 +95,19 @@ export default function ThoughtsPageClient() {
     ? []
     : thoughts.filter((t) => categoryIdMap[t.category_id] === selectedCategory);
 
+  //Duplicated, to put in a shared utils file
+  const [boardSize, setBoardSize] = useState({ width: 800, height: 600 })
+  const thoughtCount = thoughts.length
+  const computedWidth = Math.max(window.innerWidth, thoughtCount * 50)
+  const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60)
+  setBoardSize({ width: computedWidth, height: computedHeight })
   return (
     <Suspense
       fallback={
         <main
           style={{
-            height: '100vh',
+            width: `${boardSize.width}px`,
+            height: `${boardSize.height}px`,
             backgroundColor: '#444444',
             color: 'white',
             display: 'flex',

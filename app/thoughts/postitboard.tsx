@@ -147,8 +147,6 @@ export default function PostItBoard({
         ref={boardRef}
         style={{
           position: 'relative',
-          width: `${boardSize.width}px`,
-          height: `${boardSize.height}px`,
           overflow: 'auto',
           padding: '2rem',
           backgroundColor: '#444444',
