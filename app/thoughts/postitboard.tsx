@@ -23,28 +23,33 @@ export default function PostItBoard({
   const draggingRef = useRef<string | null>(null)
   const offsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
 
-//Random Layout
-const boardRef = useRef<HTMLDivElement>(null)
-useEffect(() => {
-  const boardRect = boardRef.current?.getBoundingClientRect()
-  const boardWidth = boardRect?.width ?? 800
-  const boardHeight = boardRect?.height ?? 600
+  //Random layout
+  const boardRef = useRef<HTMLDivElement>(null)
+  const [boardSize, setBoardSize] = useState({ width: 800, height: 600 })
 
-  setRenderedThoughts((prev) => {
-    const updated = thoughts.map((thought) => {
-      const existing = prev.find((t) => t.id === thought.id)
-      return existing
-        ? existing
-        : {
-            ...thought,
-            top: Math.random() * (boardHeight - 150), // 150 is height of post-it
-            left: Math.random() * (boardWidth - 180), // 180 is width of post-it
-            rotation: (Math.random() - 0.5) * 20,
-          }
+  useEffect(() => {
+    const thoughtCount = thoughts.length
+    const computedWidth = Math.max(window.innerWidth, thoughtCount * 250)
+    const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 300)
+
+    setBoardSize({ width: computedWidth, height: computedHeight })
+
+    setRenderedThoughts((prev) => {
+      const updated = thoughts.map((thought) => {
+        const existing = prev.find((t) => t.id === thought.id)
+        return existing
+          ? existing
+          : {
+              ...thought,
+              top: Math.random() * (computedHeight - 150), 
+              left: Math.random() * (computedWidth - 180),
+              rotation: (Math.random() - 0.5) * 20,
+            }
+      })
+      return updated
     })
-    return updated
-  })
-}, [thoughts])
+  }, [thoughts])
+
 
   // Mouse drag
   useEffect(() => {
@@ -142,11 +147,11 @@ useEffect(() => {
         ref={boardRef}
         style={{
           position: 'relative',
-          flex: 1,
+          width: `${boardSize.width}px`,
+          height: `${boardSize.height}px`,
           overflow: 'auto',
           padding: '2rem',
           backgroundColor: '#444444',
-          height: '100%',
         }}
       >
         {visibleNotes.map((note) => (
