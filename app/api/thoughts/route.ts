@@ -4,7 +4,11 @@ import sanitizeHtml from 'sanitize-html'
 import supabase from '@/lib/supabase'
 import { LRUCache } from 'lru-cache'
 
-// … your rateLimiter setup …
+// Create a typed LRU cache for rate limiting based on IP
+const rateLimiter = new LRUCache<string, number>({
+  max: 5000,
+  ttl: 1000 * 60 * 60 * 24, // 60*24 minutes
+});
 
 // 1️⃣ Define a Zod schema for your input
 const ThoughtSchema = z.object({
@@ -19,7 +23,19 @@ const ThoughtSchema = z.object({
 })
 
 export async function POST(req: Request): Promise<Response> {
-  // … rate-limiting logic …
+  const ip = req.headers.get('x-forwarded-for') || 'unknown';
+  const now = Date.now();
+  const lastRequestTime = rateLimiter.get(ip);
+
+  // Limit to one request every day per IP
+  if (lastRequestTime && now - lastRequestTime < 60 * 60 * 24 * 1000) {
+    return new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  rateLimiter.set(ip, now);
 
   let rawBody: unknown
   try {

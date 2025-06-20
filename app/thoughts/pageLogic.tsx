@@ -16,6 +16,8 @@ export default function ThoughtsPageClient() {
   const [categoryIdMap, setCategoryIdMap] = useState<Record<string, string>>({});
   const [thoughts, setThoughts] = useState<Thought[]>([]);
   const [loading, setLoading] = useState(true);
+    const [rateLimitedMessage, setRateLimitedMessage] = useState('');
+
 
   useEffect(() => {
     setSelectedCategory(categoryFromQuery);
@@ -73,11 +75,19 @@ export default function ThoughtsPageClient() {
           category_id: categoryId,
         }),
       });
+
+      if (res.status === 429) {
+        const body = await res.json();
+        setRateLimitedMessage(body.error || 'You are sending too many thoughts. Please slow down.');
+        return;
+      }
+
       if (!res.ok) throw new Error('Failed to post thought');
       setNewThought('');
       await fetchThoughts();
     } catch (error) {
       console.error('Error posting thought:', error);
+      setRateLimitedMessage('An error occurred while posting your thought.');
     }
   };
 
@@ -135,6 +145,9 @@ export default function ThoughtsPageClient() {
               setNewThought={setNewThought}
               addThought={addThought}
             />
+            {rateLimitedMessage && (
+              <p className="mt-2 text-red-500 text-center">{rateLimitedMessage}</p>
+            )}
           </div>
         </main>
       )}
