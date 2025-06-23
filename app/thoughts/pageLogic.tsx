@@ -98,9 +98,22 @@ export default function ThoughtsPageClient() {
   //Duplicated, to put in a shared utils file
   const [boardSize, setBoardSize] = useState({ width: 800, height: 600 })
   const thoughtCount = thoughts.length
-  const computedWidth = Math.max(window.innerWidth, thoughtCount * 50)
-  const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60)
-  setBoardSize({ width: computedWidth, height: computedHeight })
+  useEffect(() => {
+    const handleResize = () => {
+      const computedWidth = Math.max(window.innerWidth, thoughtCount * 50);
+      const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60);
+      setBoardSize({ width: computedWidth, height: computedHeight });
+    };
+
+    handleResize(); // Initial size calculation
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [thoughtCount]);
+
+  // End of duplicated code
   return (
     <Suspense
       fallback={
@@ -141,6 +154,8 @@ export default function ThoughtsPageClient() {
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: '#444444',
+            overflow: 'auto',
+            position: 'relative',
           }}
         >
           <PostItBoard

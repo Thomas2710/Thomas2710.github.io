@@ -27,16 +27,6 @@ export async function POST(req: Request): Promise<Response> {
   const now = Date.now();
   const lastRequestTime = rateLimiter.get(ip);
 
-  // Limit to one request every day per IP
-  if (lastRequestTime && now - lastRequestTime < 60 * 60 * 24 * 1000) {
-    return new Response(JSON.stringify({ error: 'Too many requests. Please try again later.' }), {
-      status: 429,
-      headers: { 'Content-Type': 'application/json' },
-    })
-  }
-
-  rateLimiter.set(ip, now);
-
   let rawBody: unknown
   try {
     rawBody = await req.json()
@@ -54,6 +44,19 @@ export async function POST(req: Request): Promise<Response> {
     )
   }
   const { text, category_id } = result.data
+
+  // 2️⃣ Rate limiter logic 
+  // Limit to one request every day per IP
+  if (lastRequestTime && now - lastRequestTime < 60 * 60 * 24 * 1000) {
+    return new Response(JSON.stringify({ error: 'Too many requests. You can only post one thought a day per category' }), {
+      status: 429,
+      headers: { 'Content-Type': 'application/json' },
+    })
+  }
+
+  rateLimiter.set(ip, now);
+
+
 
   // 3️⃣ Sanitize the text (strip all HTML tags/attributes)
   const cleanText = sanitizeHtml(text, {
