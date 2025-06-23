@@ -147,15 +147,21 @@ export default function ThoughtsPageClient() {
           Loading thoughts…
         </main>
       ) : (
-        <main
+      <main
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          backgroundColor: '#444444',
+          overflow: 'hidden',
+          position: 'relative',
+        }}
+      >
+        <div
           style={{
-            width: `${boardSize.width}px`,
-            height: `${boardSize.height}px`,
-            display: 'flex',
-            flexDirection: 'column',
-            backgroundColor: '#444444',
-            overflow: 'auto',
-            position: 'relative',
+            flex: 1,
+            overflowY: 'auto',
+            padding: '1rem',
           }}
         >
           <PostItBoard
@@ -163,17 +169,25 @@ export default function ThoughtsPageClient() {
             filterCategory={selectedCategory}
             categoryIdMap={categoryIdMap}
           />
-          <div style={{ padding: '1rem', maxWidth: '600px', margin: '0 auto' }}>
-            <ThoughtInputBar
-              newThought={newThought}
-              setNewThought={setNewThought}
-              addThought={addThought}
-            />
-            {rateLimitedMessage && (
-              <p className="mt-2 text-red-500 text-center">{rateLimitedMessage}</p>
-            )}
-          </div>
-        </main>
+        </div>
+
+        <ThoughtInputBar
+          newThought={newThought}
+          setNewThought={setNewThought}
+          addThought={addThought}
+        />
+
+        {rateLimitedMessage && (
+          <p style={{
+            marginTop: '0.5rem',
+            color: 'red',
+            textAlign: 'center',
+          }}>
+            {rateLimitedMessage}
+          </p>
+        )}
+      </main>
+
       )}
     </Suspense>
   );
