@@ -18,10 +18,10 @@ export default function ThoughtInputBar({
         width: '100%',
         margin: '0 auto',
         display: 'flex',
-        padding: '1rem',
+        padding: '2rem',
         borderTop: '1px solid #ccc',
         backgroundColor: '#444444',
-        position: 'sticky',
+        position: 'fixed',
         bottom: 0,
         zIndex: 10,
       }}

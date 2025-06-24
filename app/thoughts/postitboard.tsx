@@ -29,10 +29,9 @@ export default function PostItBoard({
 
   useEffect(() => {
     const thoughtCount = thoughts.length
-    const computedWidth = Math.max(window.innerWidth, thoughtCount * 50)
-    const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60)
-
-    setBoardSize({ width: computedWidth, height: computedHeight })
+    const computedWidth = Math.max(window.innerWidth, thoughtCount * 50);
+    const computedHeight = window.innerHeight-200
+    setBoardSize({ width: computedWidth, height: computedHeight });
 
     setRenderedThoughts((prev) => {
       const updated = thoughts.map((thought) => {
@@ -146,15 +145,13 @@ export default function PostItBoard({
       <div
         ref={boardRef}
         style={{
-          height: '100%',
-          width: '100%',
+          height: boardSize.height,
+          width: boardSize.width,
           position: 'relative',
           display: 'flex',
-          overflow: 'auto',
-          padding: '-2rem',
+          overflowX: 'auto',
+          overflowY: 'hidden',
           backgroundColor: '#444444',
-
-
         }}
       >
         {visibleNotes.map((note) => (

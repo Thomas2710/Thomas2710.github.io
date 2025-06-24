@@ -95,36 +95,16 @@ export default function ThoughtsPageClient() {
     ? []
     : thoughts.filter((t) => categoryIdMap[t.category_id] === selectedCategory);
 
-  //Duplicated, to put in a shared utils file
-  const [boardSize, setBoardSize] = useState({ width: 800, height: 600 })
-  const thoughtCount = thoughts.length
-  useEffect(() => {
-    const handleResize = () => {
-      const computedWidth = Math.max(window.innerWidth, thoughtCount * 50);
-      const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60);
-      setBoardSize({ width: computedWidth, height: computedHeight });
-      console.log('Board size updated:', { width: computedWidth, height: computedHeight });
-    };
 
-    handleResize(); // Initial size calculation
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [thoughtCount]);
-
-  // End of duplicated code
   return (
     <Suspense
       fallback={
         <main
           style={{
-            width: `${boardSize.width}px`,
-            height: `${boardSize.height}px`,
+            width: `100%`,
+            height: `100%`,
             backgroundColor: '#444444',
             color: 'white',
-            display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -138,7 +118,7 @@ export default function ThoughtsPageClient() {
           style={{
             backgroundColor: '#444444',
             color: 'white',
-            display: 'flex',
+
             justifyContent: 'center',
             alignItems: 'center',
           }}
@@ -148,11 +128,9 @@ export default function ThoughtsPageClient() {
       ) : (
       <main
         style={{
-          width: `${boardSize.width}px`,
-          height: `${boardSize.height}px`,
           display: 'flex',
           flexDirection: 'column',
-          minHeight: '100vh',
+          minHeight: '90vh',
           backgroundColor: '#444444',
           overflow: 'hidden',
           position: 'relative',
@@ -161,9 +139,8 @@ export default function ThoughtsPageClient() {
         <div
           style={{
             flex: 1,
-            overflowY: 'auto',
             padding: '1rem',
-            flexGrow: 1,
+            overflowX: 'auto'
           }}
         >
           <PostItBoard
@@ -173,21 +150,21 @@ export default function ThoughtsPageClient() {
           />
         </div>
 
-        <ThoughtInputBar
-          newThought={newThought}
-          setNewThought={setNewThought}
-          addThought={addThought}
-        />
-
         {rateLimitedMessage && (
           <p style={{
-            marginTop: '0.5rem',
             color: 'red',
             textAlign: 'center',
           }}>
             {rateLimitedMessage}
           </p>
         )}
+
+        <ThoughtInputBar
+          newThought={newThought}
+          setNewThought={setNewThought}
+          addThought={addThought}
+        />
+
       </main>
 
       )}
