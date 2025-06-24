@@ -103,6 +103,7 @@ export default function ThoughtsPageClient() {
       const computedWidth = Math.max(window.innerWidth, thoughtCount * 50);
       const computedHeight = Math.max(window.innerHeight, Math.ceil(thoughtCount / 4) * 60);
       setBoardSize({ width: computedWidth, height: computedHeight });
+      console.log('Board size updated:', { width: computedWidth, height: computedHeight });
     };
 
     handleResize(); // Initial size calculation
@@ -135,8 +136,6 @@ export default function ThoughtsPageClient() {
       {loading ? (
         <main
           style={{
-            width: `${boardSize.width}px`,
-            height: `${boardSize.height}px`,
             backgroundColor: '#444444',
             color: 'white',
             display: 'flex',
@@ -149,6 +148,8 @@ export default function ThoughtsPageClient() {
       ) : (
       <main
         style={{
+          width: `${boardSize.width}px`,
+          height: `${boardSize.height}px`,
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
@@ -162,6 +163,7 @@ export default function ThoughtsPageClient() {
             flex: 1,
             overflowY: 'auto',
             padding: '1rem',
+            flexGrow: 1,
           }}
         >
           <PostItBoard

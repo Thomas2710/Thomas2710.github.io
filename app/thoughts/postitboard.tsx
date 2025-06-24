@@ -146,10 +146,15 @@ export default function PostItBoard({
       <div
         ref={boardRef}
         style={{
+          height: '100%',
+          width: '100%',
           position: 'relative',
+          display: 'flex',
           overflow: 'auto',
-          padding: '2rem',
+          padding: '-2rem',
           backgroundColor: '#444444',
+
+
         }}
       >
         {visibleNotes.map((note) => (

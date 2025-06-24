@@ -16,7 +16,6 @@ export default function ThoughtInputBar({
     <div
       style={{
         width: '100%',
-        maxWidth: '600px',
         margin: '0 auto',
         display: 'flex',
         padding: '1rem',
