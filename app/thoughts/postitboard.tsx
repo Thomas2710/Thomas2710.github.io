@@ -1,54 +1,62 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react'
-import type { Thought } from '../lib/thoughts'
+import React, { Suspense, useEffect, useRef, useState } from 'react';
+import type { Thought } from '../lib/thoughts';
 
 interface RenderedThought extends Thought {
-  top: number
-  left: number
-  rotation: number
+  top: number;
+  left: number;
+  rotation: number;
 }
 
 interface PostItBoardProps {
-  thoughts: Thought[]
-  filterCategory: string
-  categoryIdMap: Record<string, string>
+  thoughts: Thought[];
+  filterCategory: string;
+  categoryIdMap: Record<string, string>;
+  newlyAddedThoughtId: string | null;
 }
 
 export default function PostItBoard({
   thoughts,
   filterCategory,
   categoryIdMap,
+  newlyAddedThoughtId,
 }: PostItBoardProps) {
-  const [renderedThoughts, setRenderedThoughts] = useState<RenderedThought[]>([])
-  const [highlightedId, setHighlightedId] = useState<string | null>(null)
-  const draggingRef = useRef<string | null>(null)
-  const offsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const [renderedThoughts, setRenderedThoughts] = useState<RenderedThought[]>([]);
+  const [highlightedId, setHighlightedId] = useState<string | null>(null);
+  const draggingRef = useRef<string | null>(null);
+  const offsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  //Random layout
-  const boardRef = useRef<HTMLDivElement>(null)
-  const [boardSize, setBoardSize] = useState({ width: 800, height: 600 })
+  // Random layout
+  const boardRef = useRef<HTMLDivElement>(null);
+  const [boardSize, setBoardSize] = useState({ width: 800, height: 600 });
 
   useEffect(() => {
-    const thoughtCount = thoughts.length
+    const thoughtCount = thoughts.length;
     const computedWidth = Math.max(window.innerWidth, thoughtCount * 50);
-    const computedHeight = window.innerHeight-200
+    const computedHeight = window.innerHeight - 200;
     setBoardSize({ width: computedWidth, height: computedHeight });
 
     setRenderedThoughts((prev) => {
       const updated = thoughts.map((thought) => {
-        const existing = prev.find((t) => t.id === thought.id)
+        const existing = prev.find((t) => t.id === thought.id);
         return existing
           ? existing
           : {
               ...thought,
-              top: Math.random() * (computedHeight - 150), 
+              top: Math.random() * (computedHeight - 150),
               left: Math.random() * (computedWidth - 180),
               rotation: (Math.random() - 0.5) * 20,
-            }
-      })
-      return updated
-    })
-  }, [thoughts])
+            };
+      });
+      return updated;
+    });
+  }, [thoughts]);
 
+  // Automatically highlight newly added thought if its ID is passed
+  useEffect(() => {
+    if (newlyAddedThoughtId) {
+      setHighlightedId(newlyAddedThoughtId);
+    }
+  }, [newlyAddedThoughtId]); // Update whenever the newlyAddedThoughtId changes
 
   // Mouse drag
   useEffect(() => {
@@ -64,27 +72,28 @@ export default function PostItBoard({
                 }
               : note
           )
-        )
+        );
       }
-    }
+    };
 
     const handleMouseUp = () => {
-      draggingRef.current = null
-    }
+      draggingRef.current = null;
+    };
 
-    window.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('mouseup', handleMouseUp)
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('mouseup', handleMouseUp)
-    }
-  }, [])
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, []);
+
   // Touch drag
   useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
       if (draggingRef.current !== null) {
-        const touch = e.touches[0]
+        const touch = e.touches[0];
         setRenderedThoughts((prev) =>
           prev.map((note) =>
             note.id === draggingRef.current
@@ -95,50 +104,50 @@ export default function PostItBoard({
                 }
               : note
           )
-        )
+        );
       }
-    }
+    };
 
     const handleTouchEnd = () => {
-      draggingRef.current = null
-    }
+      draggingRef.current = null;
+    };
 
-    window.addEventListener('touchmove', handleTouchMove, { passive: false })
-    window.addEventListener('touchend', handleTouchEnd)
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleTouchEnd);
 
     return () => {
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('touchend', handleTouchEnd)
-    }
-  }, [])
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, []);
 
   const handleMouseDown = (e: React.MouseEvent, id: string) => {
-    const rect = e.currentTarget.getBoundingClientRect()
+    const rect = e.currentTarget.getBoundingClientRect();
     offsetRef.current = {
       x: e.clientX - rect.left,
       y: e.clientY - rect.top,
-    }
-    draggingRef.current = id
-    setHighlightedId(id)
-  }
+    };
+    draggingRef.current = id;
+    setHighlightedId(id);
+  };
 
   const handleTouchStart = (e: React.TouchEvent, id: string) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const touch = e.touches[0]
+    const rect = e.currentTarget.getBoundingClientRect();
+    const touch = e.touches[0];
     offsetRef.current = {
       x: touch.clientX - rect.left,
       y: touch.clientY - rect.top,
-    }
-    draggingRef.current = id
-    setHighlightedId(id)
-    e.preventDefault()
-  }
+    };
+    draggingRef.current = id;
+    setHighlightedId(id);
+    e.preventDefault();
+  };
 
   const visibleNotes = renderedThoughts.filter((note) => {
-    if (filterCategory === 'all') return true
-    const categoryName = categoryIdMap[note.category_id]
-    return categoryName === filterCategory
-  })
+    if (filterCategory === 'all') return true;
+    const categoryName = categoryIdMap[note.category_id];
+    return categoryName === filterCategory;
+  });
 
   return (
     <Suspense fallback={<div>Loading notes...</div>}>
@@ -167,7 +176,7 @@ export default function PostItBoard({
               minHeight: '100px',
               padding: '1rem',
               borderRadius: '8px',
-              backgroundColor: '#fff',
+              backgroundColor: note.id === newlyAddedThoughtId ? '#fffae6' : '#fff', // Highlight color
               backgroundImage: `
                 repeating-linear-gradient(
                   to bottom,
@@ -177,21 +186,15 @@ export default function PostItBoard({
                 )
               `,
               color: '#000',
-              boxShadow:
-                highlightedId === note.id
-                  ? '4px 4px 12px rgba(0,0,0,0.4)'
-                  : '2px 2px 6px rgba(0,0,0,0.2)',
-              border:
-                highlightedId === note.id
-                  ? '2px solid #007bff'
-                  : 'none',
+              boxShadow: highlightedId === note.id ? '4px 4px 12px rgba(0,0,0,0.4)' : '2px 2px 6px rgba(0,0,0,0.2)',
+              border: highlightedId === note.id ? '2px solid #007bff' : 'none',
               transform: `rotate(${note.rotation}deg)`,
               cursor: 'grab',
               zIndex: highlightedId === note.id ? 10 : 1,
               transition: 'box-shadow 0.2s, border 0.2s',
               fontFamily: 'Comic Sans MS, cursive',
               userSelect: 'none',
-              touchAction: 'none', 
+              touchAction: 'none',
               overflowWrap: 'break-word',
             }}
           >
@@ -210,5 +213,5 @@ export default function PostItBoard({
         ))}
       </div>
     </Suspense>
-  )
+  );
 }

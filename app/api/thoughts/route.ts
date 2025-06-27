@@ -65,16 +65,17 @@ export async function POST(req: Request): Promise<Response> {
   })
 
   // 4️⃣ Insert into Supabase (parameterized under the hood)
-  const { error } = await supabase
+  const {data, error } = await supabase
     .from('thoughts')
     .insert([{ text: cleanText, category_id }])
+    .select('id')
 
   if (error) {
     console.error('Supabase POST error:', error)
     return new Response(JSON.stringify({ error: error.message }), { status: 500 })
   }
 
-  return Response.json({ success: true })
+  return Response.json({ success: true, id: data[0].id })
 }
 
 export async function GET(): Promise<Response> {
