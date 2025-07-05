@@ -25,9 +25,26 @@ export default function PostItBoard({
   const draggingRef = useRef<string | null>(null);
   const offsetRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
 
-  // Random layout
+  // Board size state
   const boardRef = useRef<HTMLDivElement>(null);
   const [boardSize, setBoardSize] = useState({ width: 800, height: 600 });
+
+  // Update board size dynamically on resize
+  useEffect(() => {
+    const updateBoardSize = () => {
+      const computedWidth = Math.max(window.innerWidth, thoughts.length * 50);
+      const computedHeight = window.innerHeight - 200;
+      setBoardSize({ width: computedWidth, height: computedHeight });
+    };
+
+    updateBoardSize();  // Initial size setup
+
+    window.addEventListener('resize', updateBoardSize);
+
+    return () => {
+      window.removeEventListener('resize', updateBoardSize);
+    };
+  }, [thoughts]);
 
   useEffect(() => {
     const thoughtCount = thoughts.length;
@@ -56,9 +73,9 @@ export default function PostItBoard({
     if (newlyAddedThoughtId) {
       setHighlightedId(newlyAddedThoughtId);
     }
-  }, [newlyAddedThoughtId]); // Update whenever the newlyAddedThoughtId changes
+  }, [newlyAddedThoughtId]);
 
-  // Mouse drag
+  // Mouse drag handler
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (draggingRef.current !== null) {
@@ -89,18 +106,22 @@ export default function PostItBoard({
     };
   }, []);
 
-  // Touch drag
+  // Touch drag handler with scaling adjustments
   useEffect(() => {
     const handleTouchMove = (e: TouchEvent) => {
       if (draggingRef.current !== null) {
         const touch = e.touches[0];
+        const boardRect = boardRef.current?.getBoundingClientRect();
+        const adjustedX = touch.clientX - boardRect!.left;
+        const adjustedY = touch.clientY - boardRect!.top;
+
         setRenderedThoughts((prev) =>
           prev.map((note) =>
             note.id === draggingRef.current
               ? {
                   ...note,
-                  top: touch.clientY - offsetRef.current.y,
-                  left: touch.clientX - offsetRef.current.x,
+                  top: adjustedY - offsetRef.current.y,
+                  left: adjustedX - offsetRef.current.x,
                 }
               : note
           )
