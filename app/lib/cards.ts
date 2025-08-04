@@ -1,11 +1,11 @@
-export const categories: string[] = ['Food', 'Volunteer', 'Sustainable Products', 'Wellfare'];
+export const categories: string[] = ['La minchia che ti mangi', 'Volontaria al posto di brainrottare', 'Compra sostenibile', 'Sei troppo ricco fratm'];
 
 
 export const colorMap: Record<string, string> = {
-  'Food': '#F30067',
-  'Volunteer': '#00D1CD',
-  'Wellfare': '#F78536',
-  'Sustainable Products': '#93A7D1',
+  'La minchia che ti mangi': '#F30067',
+  'Volontaria al posto di brainrottare': '#00D1CD',
+  'Sei troppo ricco fratm': '#F78536',
+  'Compra sostenibile': '#93A7D1',
 };
 
 export type Card = {
