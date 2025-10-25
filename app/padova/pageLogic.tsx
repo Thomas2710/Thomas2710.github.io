@@ -3,10 +3,10 @@
 import React, { useState } from 'react'
 import FilterBar from './FilterBar'
 import CardGrid from './CardGrid'
-import { cards as allCards, categories } from '@/lib/cards_knowledge'
-import type { Card } from '@/lib/cards_knowledge'
+import { cards as allCards, categories } from '@/lib/pd'
+import type { Placecard } from '@/lib/pd'
 
-export default function KnowledgePageClient() {
+export default function PadovaPageClient() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const toggleCategory = (category: string) => 
@@ -16,7 +16,7 @@ export default function KnowledgePageClient() {
         : [...prev, category]
     )
 
-  const filteredCards: Card[] =
+  const filteredCards: Placecard[] =
     selectedCategories.length === 0
       ? allCards
       : allCards.filter(card => selectedCategories.includes(card.category))

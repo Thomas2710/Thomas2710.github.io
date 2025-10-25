@@ -1,4 +1,3 @@
-// components/CardGrid.tsx
 'use client';
 
 import React from 'react';

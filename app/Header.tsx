@@ -4,7 +4,7 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { FaInstagram, FaEnvelope, FaLinkedin } from 'react-icons/fa';
+import { FaInstagram, FaEnvelope, FaLinkedin , FaArrowLeft} from 'react-icons/fa';
 
 type Category = { id: string; name: string };
 
@@ -51,12 +51,15 @@ const Header: React.FC = () => {
         </button>
 
         {pathName === '/thoughts' && categoryFromQuery && (
-          <div className="absolute left-1/2 transform -translate-x-1/2">
+          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
             <h2 className="text-lg text-gray-200">{categoryFromQuery}</h2>
           </div>
         )}
 
         <div className="flex flex-col items-end">
+          <Link href="/" className="absolute right-[10%] text-white-400 underline flex items-center hover:text-blue-500">
+            <FaArrowLeft className="mr-1" /> Back to home
+          </Link>
           <span className="font-bold text-base mb-1">{pageTitle}</span>
           <div className="flex items-center space-x-3">
             <a href="mailto:thomas.trevisan00@gmail.com" title="Email">
@@ -82,52 +85,71 @@ const Header: React.FC = () => {
         </div>
       </header>
 
-      {isNavOpen && (
-        <>          
-          <div
-            className="fixed inset-0 bg-black bg-opacity-50 z-40"
-            onClick={closeNav}
-          />
-          <nav className="fixed inset-y-0 left-0 w-72 bg-gray-800 p-6 overflow-y-auto z-50">
-            <ul className="space-y-2">
-              <li>
-                <Link href="/" passHref
-                    onClick={closeNav}
-                    className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
-                  >
-                    <span className="text-white">Knowledge</span>
+  {isNavOpen && (
+    <>
+      {/* Background overlay */}
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-40"
+        onClick={closeNav}
+      />
+
+      {/* Sidebar navigation */}
+      <nav className="fixed inset-y-0 left-0 w-72 bg-gray-800 p-6 overflow-y-auto z-50">
+        <ul className="space-y-2">
+          {/* Static Knowledge Link */}
+          <li>
+            <Link
+              href="/knowledge"
+              onClick={closeNav}
+              className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              <span className="text-white">Knowledge</span>
+            </Link>
+          </li>
+
+          {/* Thoughts category list */}
+          <li className="mt-4 mb-2 text-gray-400 font-semibold pl-0">
+            <span className="w-5 mr-2" />
+            Thoughts
+          </li>
+
+          {categories.map((cat) => {
+            const isSelected =
+              pathName === '/thoughts' && categoryFromQuery === cat.name;
+
+            return (
+              <li key={cat.id}>
+                <Link
+                  href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
+                  onClick={closeNav}
+                  className={`flex items-center py-2 px-1 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
+                    isSelected ? 'bg-[#444444]' : ''
+                  }`}
+                >
+                  <span className="w-5 mr-2">
+                    {isSelected ? '➤' : ''}
+                  </span>
+                  <span className="text-white">{cat.name}</span>
                 </Link>
               </li>
+            );
+          })}
 
-              <li className="mt-4 mb-2  text-gray-400 font-semibold pl-0">
-                <span className="w-5 mr-2" />
-                Thoughts
-              </li>
-              {categories.map((cat) => {
-                const isSelected = pathName === '/thoughts' && categoryFromQuery === cat.name;
-                return (
-                  <li key={cat.id}>
-                    <Link
-                      href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
-                      passHref
-                        onClick={closeNav}
-                        className={`flex items-center py-2 px-1 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
-                          isSelected ? 'bg-[#444444]' : ''
-                        }`}
-                      >
-                        <span className="w-5 mr-2">
-                          {isSelected ? '➤' : ''}
-                        </span>
-                        <span className="text-white">{cat.name}</span>
+          {/* Optional extra link — "Padova" */}
+          <li className="mt-4">
+            <Link
+              href="/padova"
+              onClick={closeNav}
+              className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              <span className="text-white">Padova</span>
+            </Link>
+          </li>
+        </ul>
+      </nav>
+    </>
+  )}
 
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
-        </>
-      )}
     </Suspense>
   );
 };

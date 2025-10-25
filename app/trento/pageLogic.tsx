@@ -6,7 +6,7 @@ import CardGrid from './CardGrid'
 import { cards as allCards, categories } from '@/lib/cards_knowledge'
 import type { Card } from '@/lib/cards_knowledge'
 
-export default function KnowledgePageClient() {
+export default function PadovaPageClient() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const toggleCategory = (category: string) => 

@@ -5,7 +5,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PostItBoard from './postitboard';
 import ThoughtInputBar from './inputbar';
-import { Thought } from '../lib/thoughts';
+import { Thought } from '../../lib/thoughts';
 
 export default function ThoughtsPageClient() {
   const searchParams = useSearchParams();

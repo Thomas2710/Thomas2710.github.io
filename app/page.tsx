@@ -1,5 +1,5 @@
-import { permanentRedirect } from 'next/navigation';
+import HomePage from "@/app/pageLogic";
 
 export default function Page() {
-  permanentRedirect('/knowledge');
+  return <HomePage />;
 }

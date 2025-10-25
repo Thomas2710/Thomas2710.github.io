@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
-import type { Thought } from '../lib/thoughts';
+import type { Thought } from '../../lib/thoughts';
 
 interface RenderedThought extends Thought {
   top: number;

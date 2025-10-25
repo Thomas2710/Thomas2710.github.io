@@ -1,13 +1,12 @@
-// components/CardGrid.tsx
 'use client';
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, colorMap } from '@/lib/cards_knowledge';
+import { Placecard, colorMap } from '@/lib/pd';
 import Image from 'next/image';
 
 type CardGridProps = {
-  cards: Card[];
+  cards: Placecard[];
 };
 
 const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
@@ -44,7 +43,7 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
 
               <div>
                 <h3 className="text-xl mb-1">{card.title}</h3>
-                <p className="text-gray-500">{card.category}</p>
+                <p className="text-white-500">{card.description}</p>
               </div>
             </motion.div>
           </a>
