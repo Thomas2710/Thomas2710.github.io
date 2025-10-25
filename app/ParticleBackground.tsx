@@ -16,7 +16,7 @@ interface CategoryParticle extends Particle {
   link: string;
   borderColor: string;
   name: string;
-  scale: number; // for hover animation
+  scale: number;
 }
 
 export default function ParticleBackground() {
@@ -28,14 +28,18 @@ export default function ParticleBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    const HEADER_HEIGHT = 0; // set >0 if you have a header
+    const HEADER_HEIGHT = 0;
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
-    const MIN_VEL = 0.6; // minimum diagonal velocity
-    const MAX_VEL = 2; // maximum velocity
+    // ✅ Detect if device is mobile
+    const isMobile = window.innerWidth < 768;
 
-    // Utility to generate random diagonal velocity
+    // ✅ Adjust speeds and sizes based on device type
+    const MIN_VEL = isMobile ? 0.2 : 0.6;
+    const MAX_VEL = isMobile ? 0.8 : 2;
+    const SMALL_PARTICLE_COUNT = isMobile ? 40 : 80;
+
     const randomVelocity = () => {
       const signX = Math.random() < 0.5 ? -1 : 1;
       const signY = Math.random() < 0.5 ? -1 : 1;
@@ -46,15 +50,14 @@ export default function ParticleBackground() {
 
     // Small background particles
     const smallParticles: Particle[] = [];
-    const PARTICLE_COUNT = 80;
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
+    for (let i = 0; i < SMALL_PARTICLE_COUNT; i++) {
       const { vx, vy } = randomVelocity();
       smallParticles.push({
         x: Math.random() * width,
         y: Math.random() * (height - HEADER_HEIGHT) + HEADER_HEIGHT,
         vx,
         vy,
-        size: Math.random() * 2 + 1,
+        size: (Math.random() * 2 + 1) * (isMobile ? 0.7 : 1),
       });
     }
 
@@ -70,7 +73,8 @@ export default function ParticleBackground() {
         y: Math.random() * (height - HEADER_HEIGHT - 200) + HEADER_HEIGHT + 100,
         vx,
         vy,
-        size: 100,
+        // ✅ Smaller category particles on mobile
+        size: isMobile ? 60 : 100,
         image: img,
         link: `/${cat.path}`,
         borderColor: borderColors[idx % borderColors.length],
@@ -105,7 +109,6 @@ export default function ParticleBackground() {
     };
     window.addEventListener("click", handleClick);
 
-    // Collision between category particles
     const resolveCollision = (p1: CategoryParticle, p2: CategoryParticle) => {
       const dx = p2.x - p1.x;
       const dy = p2.y - p1.y;
@@ -119,7 +122,6 @@ export default function ParticleBackground() {
         p2.x += (overlap / 2) * Math.cos(angle);
         p2.y += (overlap / 2) * Math.sin(angle);
 
-        // swap velocities
         const vxTemp = p1.vx;
         const vyTemp = p1.vy;
         p1.vx = p2.vx;
@@ -132,7 +134,7 @@ export default function ParticleBackground() {
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Small particles
+      // Background particles
       ctx.fillStyle = "rgba(255,255,255,0.5)";
       smallParticles.forEach((p) => {
         p.x += p.vx;
@@ -150,46 +152,43 @@ export default function ParticleBackground() {
         p.x += p.vx;
         p.y += p.vy;
 
-        // Bounce off canvas edges (top respects header)
         if (p.x - p.size < 0 || p.x + p.size > width) p.vx *= -1;
         if (p.y - p.size < HEADER_HEIGHT || p.y + p.size > height) p.vy *= -1;
 
-        // Collisions
         for (let j = i + 1; j < categoryParticles.length; j++) {
           resolveCollision(p, categoryParticles[j]);
         }
 
-        // Hover detection
         const dist = Math.hypot(mousePos.x - p.x, mousePos.y - p.y);
         p.scale = dist < p.size + 20 ? 1.1 : 1;
         const drawSize = p.size * p.scale;
 
-        // Draw border
         ctx.beginPath();
         ctx.arc(p.x, p.y, drawSize, 0, Math.PI * 2);
-        ctx.fillStyle = "#00000000";
-        ctx.fill();
         ctx.lineWidth = 3;
         ctx.strokeStyle = p.borderColor;
         ctx.stroke();
 
-        // Draw image
         if (p.image.complete) {
           ctx.save();
           ctx.beginPath();
           ctx.arc(p.x, p.y, drawSize - 4, 0, Math.PI * 2);
           ctx.clip();
-          ctx.drawImage(p.image, p.x - drawSize, p.y - drawSize, drawSize * 2, drawSize * 2);
+          ctx.drawImage(
+            p.image,
+            p.x - drawSize,
+            p.y - drawSize,
+            drawSize * 2,
+            drawSize * 2
+          );
           ctx.restore();
         }
 
-        // Show name on hover
-        if (dist < drawSize) {
-          ctx.fillStyle = "white";
-          ctx.font = "bold 18px sans-serif";
-          ctx.textAlign = "center";
-          ctx.fillText(p.name, p.x, p.y - drawSize - 12);
-        }
+        // ✅ Always show text (not just on hover)
+        ctx.fillStyle = "white";
+        ctx.font = isMobile ? "bold 14px sans-serif" : "bold 18px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(p.name, p.x, p.y - drawSize - 12);
       });
 
       requestAnimationFrame(animate);
