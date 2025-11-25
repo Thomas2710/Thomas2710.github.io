@@ -12,12 +12,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-
   const showHeader = pathname !== '/'; // Show header on all pages except home
 
   return (
     <html lang="en">
-      <body style={{ backgroundColor: '#444444', color: '#e2e8f0' }}>
+      <head>
+        {/* Move Google Fonts inside <head> */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+          rel="stylesheet"
+        />
+      </head>
+      <body style={{ backgroundColor: '#444444', color: '#e2e8f0', fontFamily: "'Press Start 2P', cursive" }}>
         {showHeader && (
           <Suspense fallback={<div>Loading header…</div>}>
             <Header />

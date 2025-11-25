@@ -3,6 +3,54 @@
 import { useRef, useEffect } from "react";
 import { categories } from "@/lib/sections";
 
+
+  const [quote, setQuote] = useState<{ content: string; author: string } | null>(null);
+
+  useEffect(() => {
+    async function fetchQuote() {
+      try {
+        // Try themed quotes (environment / climate / nature)
+        const res = await fetch("https://quoteslate.vercel.app/api/quotes/random?tags=happiness,mindfullness,knowledge");
+        const data = await res.json();
+        console.log("Fetched quote:", data);
+
+        if (data?.quote && data?.author) {
+          setQuote({ content: data.quote, author: data.author });
+        } else {
+          // fallback to general random quote if none found for that tag
+          const fallbackRes = await fetch("https://quoteslate.vercel.app/api/quotes/random");
+          const fallbackData = await fallbackRes.json();
+          setQuote({ content: fallbackData.quote, author: fallbackData.author });
+        }
+      } catch (error) {
+        console.error("Failed to fetch quote:", error);
+        // fallback to a static message
+        setQuote({
+          content: "The Earth is what we all have in common.",
+          author: "Wendell Berry",
+        });
+      }
+    }
+    fetchQuote();
+  }, []);
+
+
+<section className="relative z-10 h-screen flex flex-col items-center justify-center text-white text-center px-4">
+  {quote ? (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="max-w-2xl"
+    >
+      <p className="text-2xl md:text-3xl font-light mb-4">&ldquo;{quote.content}&rdquo;</p>
+      <p className="text-lg md:text-xl text-gray-300">— {quote.author}</p>
+    </motion.div>
+  ) : (
+    <p className="text-gray-400 text-lg">Loading inspiration...</p>
+  )}
+</section>
+
 interface Particle {
   x: number;
   y: number;
