@@ -31,5 +31,7 @@ export const cards: Placecard[] = [
   { id: 13, title: 'Marrakech express', nazionalità: 'Turco', description: 'Kebab', category: 'Cibo', link:'https://marrakeshexpress.it/', rating: 4.1, imageUrl: '/logos/Turchia.png' },
   { id: 15, title: 'Pizza & Love', nazionalità: 'Turco', description: 'Kebab, bello ripieno', category: 'Cibo', link:'https://www.tripadvisor.it/Restaurant_Review-g187867-d12320818-Reviews-Pizza_Love-Padua_Province_of_Padua_Veneto.html', rating: 4.3, imageUrl: '/logos/Turchia.png' },
   { id: 14, title: 'Il Gottino', nazionalità: '', description: 'Bel baretto in ghetto. Si consuma fuori', category: 'Bar', link:'https://www.ilgottinopadova.it/', rating: 4.0, imageUrl: '' },
+  { id: 16, title: 'Kamii(Claudio)', nazionalità: 'Giappone', description: 'Sushi enorme, 20% da asporto', category: 'Cibo', link:'https://ristorante-giapponese-kamii.it/', rating: 4.5, imageUrl: '/logos/Giappone.png' },
+
 
 ];

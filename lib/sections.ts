@@ -40,4 +40,12 @@ export const categories: Category[] = [
     path: 'trento',
     image: 'trento.jpeg',
   },
+  {
+    id: '5',
+    color: 'rgba(173, 127, 20, 1)',
+    name: 'Movies',
+    description: 'My letterboxd',
+    path: 'movies',
+    image: 'movies.jpeg',
+  },
 ];
