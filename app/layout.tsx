@@ -2,6 +2,7 @@
 "use client";
 
 import '@/app/ui/global.css';
+import MusicPlayer from '@/components/MusicPlayer';
 import React, { Suspense } from 'react';
 import Header from './Header';
 import { usePathname } from 'next/navigation';
@@ -24,6 +25,7 @@ export default function RootLayout({
         />
       </head>
       <body style={{ backgroundColor: '#444444', color: '#e2e8f0', fontFamily: "'Press Start 2P', cursive" }}>
+        <MusicPlayer />
         {showHeader && (
           <Suspense fallback={<div>Loading header…</div>}>
             <Header />

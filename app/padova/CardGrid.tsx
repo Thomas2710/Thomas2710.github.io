@@ -4,6 +4,8 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Placecard, colorMap } from '@/lib/pd';
 import Image from 'next/image';
+import { StatBar } from "@/components/ui/StatBar";
+
 
 type CardGridProps = {
   cards: Placecard[];
@@ -44,6 +46,9 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
               <div>
                 <h3 className="text-xl mb-1">{card.title}</h3>
                 <p className="text-white-500">{card.description}</p>
+                { card.rating !== undefined && (
+                  <StatBar label="HP" value={card.rating} max={5} color="limegreen" />
+                )}
               </div>
             </motion.div>
           </a>

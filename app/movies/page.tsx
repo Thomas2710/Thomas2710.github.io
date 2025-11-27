@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { StatBar } from "@/components/ui/StatBar";
+
 
 interface Movie {
   id: string;
@@ -16,6 +18,8 @@ interface Movie {
   rating?: string;
   runtime?: string;
 }
+
+
 
 export default function MoviesPage() {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -271,9 +275,23 @@ export default function MoviesPage() {
             )}
 
             <h3 style={{ fontSize: "0.9rem", textAlign: "center" }}>{movie.title}</h3>
-            {movie.imdb_score && <span style={{ fontSize: "0.7rem" }}>IMDb: {movie.imdb_score}</span>}
-            {movie.watched !== undefined && <span style={{ fontSize: "0.7rem" }}>Watched: {movie.watched ? "✔️" : "❌"}</span>}
-            {movie.rating && <span style={{ fontSize: "0.7rem" }}>Your rating: {movie.rating}</span>}
+            {movie.imdb_score && (
+              <StatBar
+                label="HP"
+                value={parseFloat(movie.imdb_score)}
+                color="limegreen"
+              />
+            )}
+
+            {movie.rating && (
+              <StatBar
+                label="MP"
+                value={parseFloat(movie.rating)}
+                color="dodgerblue"
+              />
+            )}
+
+
           </div>
         ))}
       </div>
@@ -329,6 +347,20 @@ export default function MoviesPage() {
               )}
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
                 <h2>{selectedMovie.title}</h2>
+                {selectedMovie.imdb_score && (
+                  <StatBar
+                    label="HP"
+                    value={parseFloat(selectedMovie.imdb_score)}
+                    color="limegreen"
+                  />
+                )}
+                {selectedMovie.rating && (
+                  <StatBar
+                    label="MP"
+                    value={parseFloat(selectedMovie.rating)}
+                    color="dodgerblue"
+                  />
+                )}
                 {selectedMovie.year && <p>Year: {selectedMovie.year}</p>}
                 {selectedMovie.genre && <p>Genre: {selectedMovie.genre}</p>}
                 {selectedMovie.director && <p>Director: {selectedMovie.director}</p>}
