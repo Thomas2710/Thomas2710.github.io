@@ -6,6 +6,8 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { FaEnvelope, FaInstagram, FaLinkedin, FaBars } from 'react-icons/fa';
 import useBackgroundMusic from '@/hooks/useBackgroundMusic';
 import RetroMuteButton from '@/components/ui/PixelSilenceButton';
+import { categories as mainCategories, Category } from '@/lib/sections';
+
 
 type Category = { id: string; name: string };
 
@@ -34,11 +36,13 @@ const Header: React.FC = () => {
     fetchCategories();
   }, []);
 
-  const mainPages = [
-    { name: 'Knowledge', href: '/knowledge' },
-    { name: 'Thoughts', href: '/thoughts' },
-    { name: 'Padova', href: '/padova' },
-  ];
+  const mainPages = mainCategories.map(cat => ({
+    name: cat.name,
+    href: `/${cat.path}`,  // dynamically use path
+    color: cat.color,
+    image: cat.image,
+    description: cat.description,
+  }));
 
   const isThoughtsPage = pathname.startsWith('/thoughts');
 
