@@ -8,9 +8,6 @@ import useBackgroundMusic from '@/hooks/useBackgroundMusic';
 import RetroMuteButton from '@/components/ui/PixelSilenceButton';
 import { categories as mainCategories, Category } from '@/lib/sections';
 
-
-type Category = { id: string; name: string };
-
 const Header: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isNavOpen, setIsNavOpen] = useState(false);
