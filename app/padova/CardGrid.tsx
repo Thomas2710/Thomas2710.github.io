@@ -42,22 +42,22 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
                 </div>
               )}
 
-              {/* TEXT CONTAINER */}
-              <div className="flex-1 min-w-0">
-                <h3 className="text-xl mb-1 truncate sm:whitespace-normal sm:truncate-none">
-                  {card.title}
-                </h3>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-lg sm:text-xl mb-1">
+                {card.title}
+              </h3>
 
-                <p className="text-white-500 text-sm overflow-hidden text-ellipsis line-clamp-3">
-                  {card.description}
-                </p>
+              <p className="text-xs sm:text-sm text-white-500 overflow-hidden text-ellipsis line-clamp-3">
+                {card.description}
+              </p>
 
-                {card.rating !== undefined && (
-                  <div className="mt-3">
-                    <StatBar label="Greatness" value={card.rating} max={5} color="limegreen" />
-                  </div>
-                )}
-              </div>
+              {card.rating !== undefined && (
+                <div className="mt-3">
+                  <StatBar label="Greatness" value={card.rating} max={5} color="limegreen" />
+                </div>
+              )}
+            </div>
+
             </motion.div>
           </a>
         ))}
