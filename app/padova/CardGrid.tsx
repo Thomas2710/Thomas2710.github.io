@@ -30,7 +30,8 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
               style={{ backgroundColor: colorMap[card.category] || '#444444' }}
-              className="flex items-center gap-4 p-4 rounded-md shadow-md min-h-[150px]"
+              className="flex items-center gap-4 p-4 rounded-md shadow-md h-60"
+
             >
               {card.imageUrl && (
                 <div className="w-20 h-20 rounded-full overflow-hidden relative flex-shrink-0">
@@ -46,8 +47,10 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
               <div>
                 <h3 className="text-xl mb-1">{card.title}</h3>
                 <p className="text-white-500">{card.description}</p>
-                { card.rating !== undefined && (
-                  <StatBar label="HP" value={card.rating} max={5} color="limegreen" />
+                {card.rating !== undefined && (
+                  <div className="mt-3">
+                    <StatBar label="Greatness" value={card.rating} max={5} color="limegreen" />
+                  </div>
                 )}
               </div>
             </motion.div>

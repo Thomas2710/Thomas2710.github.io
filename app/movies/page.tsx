@@ -2,6 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { StatBar } from "@/components/ui/StatBar";
+import { StatIcons } from "@/components/ui/StatBar";
+import { HeartFull, HeartEmpty } from "@/components/ui/StatBar";
+import { ShieldFull, ShieldEmpty } from "@/components/ui/StatBar";
+
+import { parse } from "path";
 
 
 interface Movie {
@@ -118,96 +123,117 @@ export default function MoviesPage() {
         minHeight: "100vh",
       }}
     >
-      {/* Top controls: search + filters */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
-        <input
-          type="text"
-          placeholder="Search by title..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            width: "300px",
-            padding: "0.5rem",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.8rem",
-            border: "2px solid white",
-            borderRadius: "4px",
-            backgroundColor: "#222",
-            color: "white",
-            outline: "none",
-          }}
-        />
-        <select
-          value={watchedFilter}
-          onChange={(e) => setWatchedFilter(e.target.value as any)}
-          style={{
-            padding: "0.5rem",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.7rem",
-            border: "2px solid white",
-            borderRadius: "4px",
-            backgroundColor: "#222",
-            color: "white",
-          }}
-        >
-          <option value="all">All</option>
-          <option value="watched">Watched</option>
-          <option value="notWatched">Not Watched</option>
-        </select>
-        <select
-          value={genreFilter}
-          onChange={(e) => setGenreFilter(e.target.value)}
-          style={{
-            padding: "0.5rem",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.7rem",
-            border: "2px solid white",
-            borderRadius: "4px",
-            backgroundColor: "#222",
-            color: "white",
-          }}
-        >
-          <option value="all">All genres</option>
-          {allGenres.map((g) => (
-            <option key={g} value={g}>
-              {g}
-            </option>
-          ))}
-        </select>
-        <select
-          value={sortField}
-          onChange={(e) => setSortField(e.target.value as any)}
-          style={{
-            padding: "0.5rem",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.7rem",
-            border: "2px solid white",
-            borderRadius: "4px",
-            backgroundColor: "#222",
-            color: "white",
-          }}
-        >
-          <option value="imdb">IMDb Score</option>
-          <option value="rating">Your Rating</option>
-          <option value="year">Year</option>
-        </select>
-        <select
-          value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value as any)}
-          style={{
-            padding: "0.5rem",
-            fontFamily: "'Press Start 2P', cursive",
-            fontSize: "0.7rem",
-            border: "2px solid white",
-            borderRadius: "4px",
-            backgroundColor: "#222",
-            color: "white",
-          }}
-        >
-          <option value="desc">Descending</option>
-          <option value="asc">Ascending</option>
-        </select>
-      </div>
+<div
+  style={{
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem",
+    alignItems: "center",
+    justifyContent: "space-between", // pushes legend to the right
+  }}
+>
+  {/* Filters */}
+  <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", alignItems: "center" }}>
+    <input
+      type="text"
+      placeholder="Search by title..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      style={{
+        width: "300px",
+        padding: "0.5rem",
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: "0.8rem",
+        border: "2px solid white",
+        borderRadius: "4px",
+        backgroundColor: "#222",
+        color: "white",
+        outline: "none",
+      }}
+    />
+    <select
+      value={watchedFilter}
+      onChange={(e) => setWatchedFilter(e.target.value as any)}
+      style={{
+        padding: "0.5rem",
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: "0.7rem",
+        border: "2px solid white",
+        borderRadius: "4px",
+        backgroundColor: "#222",
+        color: "white",
+      }}
+    >
+      <option value="all">All</option>
+      <option value="watched">Watched</option>
+      <option value="notWatched">Not Watched</option>
+    </select>
+    <select
+      value={genreFilter}
+      onChange={(e) => setGenreFilter(e.target.value)}
+      style={{
+        padding: "0.5rem",
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: "0.7rem",
+        border: "2px solid white",
+        borderRadius: "4px",
+        backgroundColor: "#222",
+        color: "white",
+      }}
+    >
+      <option value="all">All genres</option>
+      {allGenres.map((g) => (
+        <option key={g} value={g}>
+          {g}
+        </option>
+      ))}
+    </select>
+    <select
+      value={sortField}
+      onChange={(e) => setSortField(e.target.value as any)}
+      style={{
+        padding: "0.5rem",
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: "0.7rem",
+        border: "2px solid white",
+        borderRadius: "4px",
+        backgroundColor: "#222",
+        color: "white",
+      }}
+    >
+      <option value="imdb">IMDb Score</option>
+      <option value="rating">Your Rating</option>
+      <option value="year">Year</option>
+    </select>
+    <select
+      value={sortOrder}
+      onChange={(e) => setSortOrder(e.target.value as any)}
+      style={{
+        padding: "0.5rem",
+        fontFamily: "'Press Start 2P', cursive",
+        fontSize: "0.7rem",
+        border: "2px solid white",
+        borderRadius: "4px",
+        backgroundColor: "#222",
+        color: "white",
+      }}
+    >
+      <option value="desc">Descending</option>
+      <option value="asc">Ascending</option>
+    </select>
+  </div>
+
+  {/* Legend */}
+  <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
+      <HeartFull /> <span style={{ fontSize: "1rem" }}>= IMDb Score</span>
+    </div>
+    <div style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
+      <ShieldFull /> <span style={{ fontSize: "1rem" }}> = My Rating</span>
+    </div>
+  </div>
+</div>
+
 
       {/* Results count */}
       <div
@@ -240,6 +266,7 @@ export default function MoviesPage() {
               border: "2px solid white",
               borderRadius: "8px",
               padding: "0.5rem",
+              height: "500px",  
               width: "220px",
               display: "flex",
               flexDirection: "column",
@@ -274,24 +301,36 @@ export default function MoviesPage() {
             </div>
             )}
 
-            <h3 style={{ fontSize: "0.9rem", textAlign: "center" }}>{movie.title}</h3>
-            {movie.imdb_score && (
-              <StatBar
+            <h3
+              style={{
+                fontSize: "0.9rem",
+                textAlign: "center",
+                height: "2.6rem",       
+                overflow: "hidden",
+              }}
+            >
+              {movie.title}
+            </h3>
+            <div style={{ marginTop: "auto", width: "100%" }}>
+              <StatIcons
                 label="HP"
-                value={parseFloat(movie.imdb_score)}
-                color="limegreen"
+                value={parseFloat(movie.imdb_score || "0") || 0}
+                max={10}
+                fullIcon={HeartFull}
+                emptyIcon={HeartEmpty}
               />
-            )}
+              
 
-            {movie.rating && (
-              <StatBar
-                label="MP"
-                value={parseFloat(movie.rating)}
-                color="dodgerblue"
+              <StatIcons
+                label="Shield"
+                value={parseFloat(movie.rating || "0") || 0}
+                max={10}
+                fullIcon={ShieldFull}
+                emptyIcon={ShieldEmpty}
               />
-            )}
+              
 
-
+              </div>
           </div>
         ))}
       </div>
@@ -348,26 +387,28 @@ export default function MoviesPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: 1 }}>
                 <h2>{selectedMovie.title}</h2>
                 {selectedMovie.imdb_score && (
-                  <StatBar
+                  <StatIcons
                     label="HP"
-                    value={parseFloat(selectedMovie.imdb_score)}
-                    color="limegreen"
+                    value={parseFloat(selectedMovie.imdb_score || "0") || 0}
+                    max={10}
+                    fullIcon={HeartFull}
+                    emptyIcon={HeartEmpty}
                   />
                 )}
                 {selectedMovie.rating && (
-                  <StatBar
-                    label="MP"
-                    value={parseFloat(selectedMovie.rating)}
-                    color="dodgerblue"
+                  <StatIcons
+                    label="Shield"
+                    value={parseFloat(selectedMovie.rating || "0") || 0}
+                    max={10}
+                    fullIcon={ShieldFull}
+                    emptyIcon={ShieldEmpty}
                   />
                 )}
                 {selectedMovie.year && <p>Year: {selectedMovie.year}</p>}
                 {selectedMovie.genre && <p>Genre: {selectedMovie.genre}</p>}
                 {selectedMovie.director && <p>Director: {selectedMovie.director}</p>}
                 {selectedMovie.actors && <p>Actors: {selectedMovie.actors}</p>}
-                {selectedMovie.imdb_score && <p>IMDb Score: {selectedMovie.imdb_score}</p>}
                 {selectedMovie.watched !== undefined && <p>Watched: {selectedMovie.watched ? "✔️" : "❌"}</p>}
-                {selectedMovie.rating && <p>Your rating: {selectedMovie.rating}</p>}
                 {selectedMovie.runtime && <p>Runtime: {selectedMovie.runtime}</p>}
               </div>
             </div>

@@ -1,0 +1,25 @@
+<svg width="32" height="32" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges">
+  <!-- Top bar -->
+  <rect x="2" y="1" width="5" height="2" fill="#d67a38"></rect>
+  <rect x="7" y="1" width="3" height="2" fill="#f9d845"></rect>
+  <rect x="10" y="1" width="4" height="2" fill="#edb12c"></rect>
+
+  <!-- Left orange border -->
+  <rect x="1" y="3" width="2" height="7" fill="#d67a38"></rect>
+  <rect x="2" y="10" width="2" height="2" fill="#d67a38"></rect>
+  <rect x="3" y="12" width="2" height="1" fill="#d67a38"></rect>
+
+  <!-- Right orange border -->
+  <rect x="13" y="3" width="2" height="7" fill="#f9d845"></rect>
+  <rect x="12" y="10" width="2" height="2" fill="#edb12c"></rect>
+  <rect x="11" y="12" width="2" height="1" fill="#edb12c"></rect>
+
+  <!-- Bottom tip -->
+  <rect x="7" y="13" width="2" height="2" fill="#f9d845"></rect>
+
+  <!-- Shield interior (left dark blue) -->
+  <rect x="3" y="3" width="5" height="9" fill="#0e3d80"></rect>
+
+  <!-- Shield interior (right cyan) -->
+  <rect x="8" y="3" width="5" height="9" fill="#0cb1e5"></rect>
+</svg>

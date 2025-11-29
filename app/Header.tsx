@@ -1,24 +1,25 @@
-// components/Header.tsx
 'use client';
 
-import React, { Suspense, useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FaInstagram, FaEnvelope, FaLinkedin , FaArrowLeft} from 'react-icons/fa';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { FaEnvelope, FaInstagram, FaLinkedin, FaBars } from 'react-icons/fa';
+import useBackgroundMusic from '@/hooks/useBackgroundMusic';
+import RetroMuteButton from '@/components/ui/PixelSilenceButton';
 
 type Category = { id: string; name: string };
 
 const Header: React.FC = () => {
-  const [isNavOpen, setIsNavOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
-  const pathName = usePathname()
-  const pageTitle = pathName.charAt(1).toUpperCase() +usePathname().slice(2);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const categoryFromQuery = searchParams.get('category') ?? '';
 
+  const { muted, toggleMute } = useBackgroundMusic();
 
-  const closeNav = () => setIsNavOpen(false);
-
+  // Fetch categories
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -27,130 +28,166 @@ const Header: React.FC = () => {
         const data: Category[] = await res.json();
         setCategories(data);
       } catch (err) {
-        console.error('Error loading categories:', err);
+        console.error(err);
       }
     }
     fetchCategories();
   }, []);
 
+  const mainPages = [
+    { name: 'Knowledge', href: '/knowledge' },
+    { name: 'Thoughts', href: '/thoughts' },
+    { name: 'Padova', href: '/padova' },
+  ];
+
+  const isThoughtsPage = pathname.startsWith('/thoughts');
+
   return (
-    <Suspense
-      fallback={
-        <div className="bg-[#444444] text-white p-4 flex items-center justify-center">
-          Loading header...
-        </div>
-      }
-    >
-      <header className="bg-[#444444] text-white p-4 flex justify-between items-start relative z-50">
-        <button
-          className="text-white text-2xl focus:outline-none"
-          onClick={() => setIsNavOpen(true)}
-          aria-label="Open navigation"
-        >
-          ☰
-        </button>
-
-        {pathName === '/thoughts' && categoryFromQuery && (
-          <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center space-x-2">
-            <h2 className="text-lg text-gray-200">{categoryFromQuery}</h2>
-          </div>
-        )}
-
-        <div className="flex flex-col items-end">
-          <Link href="/" className="absolute right-[10%] text-white-400 underline flex items-center hover:text-blue-500">
-            <FaArrowLeft className="mr-1" /> Back to home
+    <header className="bg-[#444444] text-[#e2e8f0] font-[Press_Start_2P]">
+      {/* Top Bar */}
+      <div className="flex items-center justify-between px-4 py-3 relative z-50">
+        {/* Logo + Volume */}
+        <div className="flex items-center space-x-2">
+          <Link href="/" className="text-lg font-bold">
+            MySite
           </Link>
-          <span className="font-bold text-base mb-1">{pageTitle}</span>
-          <div className="flex items-center space-x-3">
-            <a href="mailto:thomas.trevisan00@gmail.com" title="Email">
-              <FaEnvelope className="w-6 h-6" />
-            </a>
-            <a
-              href="https://instagram.com/yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Instagram"
-            >
-              <FaInstagram className="w-6 h-6" />
-            </a>
-            <a
-              href="https://linkedin.com/in/yourprofile"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="LinkedIn"
-            >
-              <FaLinkedin className="w-6 h-6" />
-            </a>
-          </div>
+          <RetroMuteButton muted={muted} onClick={toggleMute} size={28} />
         </div>
-      </header>
 
-  {isNavOpen && (
-    <>
-      {/* Background overlay */}
-      <div
-        className="fixed inset-0 bg-black bg-opacity-50 z-40"
-        onClick={closeNav}
-      />
-
-      {/* Sidebar navigation */}
-      <nav className="fixed inset-y-0 left-0 w-72 bg-gray-800 p-6 overflow-y-auto z-50">
-        <ul className="space-y-2">
-          {/* Static Knowledge Link */}
-          <li>
-            <Link
-              href="/knowledge"
-              onClick={closeNav}
-              className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              <span className="text-white">Knowledge</span>
-            </Link>
-          </li>
-
-          {/* Thoughts category list */}
-          <li className="mt-4 mb-2 text-gray-400 font-semibold pl-0">
-            <span className="w-5 mr-2" />
-            Thoughts
-          </li>
-
-          {categories.map((cat) => {
-            const isSelected =
-              pathName === '/thoughts' && categoryFromQuery === cat.name;
+        {/* Desktop top nav */}
+        <nav className="hidden md:flex space-x-6 relative">
+          {mainPages.map((page) => {
+            const isThoughts = page.name === 'Thoughts';
+            const showDropdown = isThoughts && categories.length > 0;
 
             return (
-              <li key={cat.id}>
+              <div key={page.name} className="relative group">
                 <Link
-                  href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
-                  onClick={closeNav}
-                  className={`flex items-center py-2 px-1 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500 ${
-                    isSelected ? 'bg-[#444444]' : ''
+                  href={page.href}
+                  className={`px-2 py-1 border-2 border-[#e2e8f0] block ${
+                    pathname === page.href
+                      ? 'bg-[#e2e8f0] text-[#444444]'
+                      : 'hover:bg-[#888888]'
                   }`}
                 >
-                  <span className="w-5 mr-2">
-                    {isSelected ? '➤' : ''}
-                  </span>
-                  <span className="text-white">{cat.name}</span>
+                  {page.name}
                 </Link>
-              </li>
+
+                {/* Hover dropdown for subcategories */}
+                {showDropdown && (
+                  <div className="absolute top-full left-0 mt-1 bg-[#444444] border-2 border-[#e2e8f0] hidden group-hover:flex flex-col min-w-[120px] z-50">
+                    {categories.map((cat) => (
+                      <Link
+                        key={cat.id}
+                        href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
+                        className={`px-3 py-2 border-b-2 border-[#e2e8f0] ${
+                          cat.name === categoryFromQuery
+                            ? 'bg-[#e2e8f0] text-[#444444]'
+                            : 'text-[#e2e8f0] hover:bg-[#888888]'
+                        }`}
+                      >
+                        {cat.name}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
             );
           })}
+        </nav>
 
-          {/* Optional extra link — "Padova" */}
-          <li className="mt-4">
-            <Link
-              href="/padova"
-              onClick={closeNav}
-              className="py-2 px-0 hover:bg-[#444444] rounded focus:outline-none focus:ring-2 focus:ring-gray-500"
-            >
-              <span className="text-white">Padova</span>
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </>
-  )}
+        {/* Right icons */}
+        <div className="flex items-center space-x-3">
+          <a href="mailto:thomas.trevisan00@gmail.com" title="Email">
+            <FaEnvelope className="w-5 h-5" />
+          </a>
+          <a
+            href="https://instagram.com/yourprofile"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Instagram"
+          >
+            <FaInstagram className="w-5 h-5" />
+          </a>
+          <a
+            href="https://linkedin.com/in/yourprofile"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="LinkedIn"
+          >
+            <FaLinkedin className="w-5 h-5" />
+          </a>
 
-    </Suspense>
+          {/* Mobile Hamburger */}
+          <button
+            className="md:hidden ml-2"
+            onClick={() => setIsNavOpen(!isNavOpen)}
+          >
+            <FaBars className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile menu */}
+      {isNavOpen && (
+        <div className="md:hidden bg-gray-800 text-white px-4 py-4 space-y-2">
+          {mainPages.map((page) => (
+            <div key={page.name} className="flex flex-col">
+              <Link
+                href={page.href}
+                onClick={() => setIsNavOpen(false)}
+                className="block px-2 py-1 border-2 border-[#e2e8f0] hover:bg-[#888888]"
+              >
+                {page.name}
+              </Link>
+              {/* Optional subcategories in mobile dropdown */}
+              {page.name === 'Thoughts' &&
+                categories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
+                    onClick={() => setIsNavOpen(false)}
+                    className="block px-4 py-1 border-l-2 border-[#e2e8f0] hover:bg-[#888888]"
+                  >
+                    {cat.name}
+                  </Link>
+                ))}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Optional Back button for nested pages */}
+      {isThoughtsPage && (
+        <div className="px-4 py-2 text-sm text-gray-300 flex items-center space-x-2">
+          <Link href="/" className="hover:text-blue-400 flex items-center">
+            ← Back to Home
+          </Link>
+        </div>
+      )}
+
+      {/* Thoughts category tabs for desktop */}
+      {isThoughtsPage && categories.length > 0 && (
+        <div className="px-4 py-2 flex space-x-1 overflow-x-auto border-t border-gray-600">
+          {categories.map((cat) => {
+            const selected = cat.name === categoryFromQuery;
+            return (
+              <Link
+                key={cat.id}
+                href={`/thoughts?category=${encodeURIComponent(cat.name)}`}
+                className={`px-3 py-2 border-2 ${
+                  selected
+                    ? 'bg-[#e2e8f0] text-[#444444] border-[#e2e8f0]'
+                    : 'text-[#e2e8f0] border-[#e2e8f0] hover:bg-[#888888]'
+                }`}
+              >
+                {cat.name}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </header>
   );
 };
 
