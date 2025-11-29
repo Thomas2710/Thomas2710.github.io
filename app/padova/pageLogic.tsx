@@ -22,8 +22,8 @@ export default function PadovaPageClient() {
       : allCards.filter(card => selectedCategories.includes(card.category))
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <main style={{ flex: 1 }}>
+    <div className="overflow-x-hidden flex flex-col min-h-screen">
+      <main className="flex-1">
         <FilterBar
           categories={categories}
           selected={selectedCategories}
