@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Card, colorMap } from '@/lib/cards_knowledge';
+import { Placecard, colorMap } from '@/lib/tn';
 import Image from 'next/image';
 
 type CardGridProps = {
-  cards: Card[];
+  cards: Placecard[];
 };
 
 const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
@@ -27,7 +27,7 @@ const CardGrid: React.FC<CardGridProps> = ({ cards }) => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
               transition={{ duration: 0.3 }}
-              style={{ backgroundColor: colorMap[card.category] || '#444444' }}
+              style={{ backgroundColor: colorMap[card.category] || '#c12020ff' }}
               className="flex items-center gap-4 p-4 rounded-md shadow-md min-h-[150px]"
             >
               {card.imageUrl && (

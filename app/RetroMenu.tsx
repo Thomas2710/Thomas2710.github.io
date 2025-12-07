@@ -42,6 +42,8 @@ export default function RetroMenu() {
 function CategoryItem({ cat, index }: { cat: any; index: number }) {
   const [open, setOpen] = useState(false); // mobile toggle state
 
+  const hasChildren = cat.children && cat.children.length > 0;
+
   return (
     <div className="relative flex flex-col items-center group w-full">
 
@@ -52,30 +54,47 @@ function CategoryItem({ cat, index }: { cat: any; index: number }) {
         transition={{ delay: index * 0.1 }}
         className="w-full"
       >
-        <button
-          onClick={() => cat.children && setOpen(!open)}
-          className="
-            block w-72 mx-auto text-center text-white text-lg
-            font-['Press_Start_2P'] tracking-wide
-            py-4 px-4 border-4 border-white bg-black
-            hover:bg-white hover:text-black transition-all duration-150
-            shadow-[6px_6px_0px_0px_white]
-            hover:shadow-[2px_2px_0px_0px_white]
-            active:translate-y-1 active:shadow-[0px_0px_0px_0px_white]
-          "
-        >
-          {cat.name.toUpperCase()}
-        </button>
+        {hasChildren ? (
+          <button
+            onClick={() => setOpen(!open)}
+            className="
+              block w-72 mx-auto text-center text-white text-lg
+              font-['Press_Start_2P'] tracking-wide
+              py-4 px-4 border-4 border-white bg-black
+              hover:bg-white hover:text-black transition-all duration-150
+              shadow-[6px_6px_0px_0px_white]
+              hover:shadow-[2px_2px_0px_0px_white]
+              active:translate-y-1 active:shadow-[0px_0px_0px_0px_white]
+            "
+          >
+            {cat.name.toUpperCase()}
+          </button>
+        ) : (
+          <Link
+            href={`/${cat.path}`}
+            className="
+              block w-72 mx-auto text-center text-white text-lg
+              font-['Press_Start_2P'] tracking-wide
+              py-4 px-4 border-4 border-white bg-black
+              hover:bg-white hover:text-black transition-all duration-150
+              shadow-[6px_6px_0px_0px_white]
+              hover:shadow-[2px_2px_0px_0px_white]
+              active:translate-y-1 active:shadow-[0px_0px_0px_0px_white]
+            "
+          >
+            {cat.name.toUpperCase()}
+          </Link>
+        )}
       </motion.div>
 
       {/* Subcategories */}
-      {cat.children && (
+      {hasChildren && (
         <div className={`
           absolute left-full top-0 ml-2 flex flex-col space-y-2
           opacity-0 invisible group-hover:opacity-100 group-hover:visible
           transition-all duration-200
           z-50
-          ${open ? "opacity-100 visible" : ""}
+          ${open ? "opacity-100 visible relative left-0 mt-2 ml-0" : ""}
         `}>
           {cat.children.map((child: any, j: number) => (
             <motion.div
