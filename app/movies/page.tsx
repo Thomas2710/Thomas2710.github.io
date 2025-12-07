@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { StatBar } from "@/components/ui/StatBar";
 import { StatIcons } from "@/components/ui/StatBar";
 import { HeartFull, HeartEmpty } from "@/components/ui/StatBar";
 import { ShieldFull, ShieldEmpty } from "@/components/ui/StatBar";
@@ -53,6 +52,14 @@ export default function MoviesPage() {
 
   const allGenres = Array.from(new Set(movies.flatMap((m) => m.genre?.split(",") ?? []))).filter(Boolean);
 
+
+  function toNum(v?: string) {
+    if (!v) return -Infinity;
+    const cleaned = v.replace(",", ".").trim();
+    const n = Number(cleaned);
+    return isFinite(n) ? n : -Infinity;
+  }
+
   const filteredMovies = movies
     .filter((m) => m.title.toLowerCase().includes(search.toLowerCase()))
     .filter((m) => {
@@ -65,24 +72,23 @@ export default function MoviesPage() {
       return m.genre?.split(",").includes(genreFilter);
     })
     .sort((a, b) => {
-      let aVal: number = 0;
-      let bVal: number = 0;
+      const aVal =
+        sortField === "imdb"
+          ? toNum(a.imdb_score)
+          : sortField === "rating"
+          ? toNum(a.rating)
+          : toNum(a.year);
 
-      if (sortField === "imdb") {
-        aVal = parseFloat(a.imdb_score || "0");
-        bVal = parseFloat(b.imdb_score || "0");
-      } else if (sortField === "rating") {
-        aVal = parseFloat(a.rating || "0");
-        bVal = parseFloat(b.rating || "0");
-      } else if (sortField === "year") {
-        aVal = parseInt(a.year || "0");
-        bVal = parseInt(b.year || "0");
-      }
+      const bVal =
+        sortField === "imdb"
+          ? toNum(b.imdb_score)
+          : sortField === "rating"
+          ? toNum(b.rating)
+          : toNum(b.year);
 
-      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
-      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
-      return 0;
+      return sortOrder === "asc" ? aVal - bVal : bVal - aVal;
     });
+
 
   if (loading) {
     return (

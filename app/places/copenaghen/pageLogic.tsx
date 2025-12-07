@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import FilterBar from './FilterBar'
-import CardGrid from './CardGrid'
-import { cards as allCards, categories } from '@/lib/cards_knowledge'
-import type { Card } from '@/lib/cards_knowledge'
+import FilterBar from '@/app/places/copenaghen/FilterBar'
+import CardGrid from '@/app/places/copenaghen/CardGrid'
+import { cards as allCards, categories } from '@/lib/cph'
+import type { Placecard } from '@/lib/cph'
 
-export default function PadovaPageClient() {
+export default function CopenaghenPageClient() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const toggleCategory = (category: string) => 
@@ -16,14 +16,14 @@ export default function PadovaPageClient() {
         : [...prev, category]
     )
 
-  const filteredCards: Card[] =
+  const filteredCards: Placecard[] =
     selectedCategories.length === 0
       ? allCards
       : allCards.filter(card => selectedCategories.includes(card.category))
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <main style={{ flex: 1 }}>
+    <div className="overflow-x-hidden flex flex-col min-h-screen">
+      <main className="flex-1">
         <FilterBar
           categories={categories}
           selected={selectedCategories}

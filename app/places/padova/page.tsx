@@ -1,6 +1,5 @@
-// app/thoughts/page.tsx
 import React, { Suspense } from 'react'
-import PadovaPageClient from './pageLogic'
+import PadovaPageClient from '@/app/places/padova/pageLogic'
 
 export default function Page() {
   return (

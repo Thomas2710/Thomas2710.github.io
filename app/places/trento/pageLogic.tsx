@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import FilterBar from './FilterBar'
-import CardGrid from './CardGrid'
-import { cards as allCards, categories } from '@/lib/pd'
-import type { Placecard } from '@/lib/pd'
+import FilterBar from '@/app/places/trento/FilterBar'
+import CardGrid from '@/app/places/trento/CardGrid'
+import { cards as allCards, categories } from '@/lib/tn'
+import type { Placecard } from '@/lib/tn'
 
-export default function PadovaPageClient() {
+export default function TrentoPageClient() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const toggleCategory = (category: string) => 
@@ -22,8 +22,8 @@ export default function PadovaPageClient() {
       : allCards.filter(card => selectedCategories.includes(card.category))
 
   return (
-    <div className="overflow-x-hidden flex flex-col min-h-screen">
-      <main className="flex-1">
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <main style={{ flex: 1 }}>
         <FilterBar
           categories={categories}
           selected={selectedCategories}
