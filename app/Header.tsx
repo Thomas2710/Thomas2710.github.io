@@ -49,7 +49,7 @@ const Header: React.FC = () => {
   return (
     <header className="bg-[#444444] text-[#e2e8f0] font-[Press_Start_2P]">
       {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 py-3 relative z-50">
+      <div className="flex items-center justify-between px-4 py-3 relative z-[1000]">
         {/* Logo + Volume */}
         <div className="flex items-center space-x-2">
           <Link href="/" className="text-lg font-bold">
@@ -67,7 +67,7 @@ const Header: React.FC = () => {
             return (
               <div key={page.name} className="relative group">
                 <Link
-                  href={page.children.length && page.path ? '#' : page.href}
+                  href={page.href}
                   className={`px-2 py-1 border-2 border-[#e2e8f0] block ${
                     pathname === page.href ? 'bg-[#e2e8f0] text-[#444444]' : 'hover:bg-[#888888]'
                   }`}
@@ -96,7 +96,7 @@ const Header: React.FC = () => {
 
                 {/* Places dropdown */}
                 {showPlacesDropdown && page.path && (
-                  <div className="absolute top-full left-0 mt-1 bg-[#444444] border-2 border-[#e2e8f0] hidden group-hover:flex flex-col min-w-[120px] z-50">
+                  <div className="absolute top-full left-0 mt-1 bg-[#444444] border-2 border-[#e2e8f0] hidden group-hover:flex flex-col min-w-[120px] z-[1000]">
                     {page.children.map((sub) => (
                       <Link
                         key={sub.path}
@@ -178,14 +178,7 @@ const Header: React.FC = () => {
         </div>
       )}
 
-      {/* Optional Back button for Thoughts or Places */}
-      {(isThoughtsPage || isPlacesPage) && (
-        <div className="px-4 py-2 text-sm text-gray-300 flex items-center space-x-2">
-          <Link href="/" className="hover:text-blue-400 flex items-center">
-            ← Back to Home
-          </Link>
-        </div>
-      )}
+
 
       {/* Thoughts category tabs for desktop */}
       {isThoughtsPage && categories.length > 0 && (

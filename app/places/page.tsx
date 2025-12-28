@@ -1,4 +1,9 @@
-import React, { Suspense } from 'react'
+import WorldMapClient from '@/components/WorldMapClient';
+
 export default function Page() {
-  return <div className="p-8 text-white font-['Press_Start_2P']">Places Main Page</div>;
+  return (
+    <div className="w-screen h-screen overflow-hidden">
+      <WorldMapClient />
+    </div>
+  );
 }

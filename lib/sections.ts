@@ -44,7 +44,7 @@ export const categories: Category[] = [
       },
         {
           id: '4',
-          color: 'rgba(173, 20, 155, 1)',
+          color: 'rgba(17, 115, 35, 1)',
           name: 'Trento',
           description: 'Discover content related to Trento.',
           path: 'trento',
@@ -52,7 +52,7 @@ export const categories: Category[] = [
         },
         {
           id: '5',
-          color: 'rgba(173, 20, 155, 1)',
+          color: 'rgba(137, 119, 135, 1)',
           name: 'Copenaghen',
           description: 'Discover content related to Copenaghen.',
           path: 'copenaghen',
